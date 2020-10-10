@@ -31,6 +31,9 @@ public class Registration {
 		
 		public static final RegistryObject<Block> CORRUPTED_COBBLESTONE_BLOCK = BLOCKS.register("corrupted_cobblestone", () -> new CorruptedBlock(Block.Properties.from(Blocks.COBBLESTONE).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_COBBLESTONE_BLOCK_ITEM = ITEMS.register("corrupted_cobblestone", () -> new BlockItem(CORRUPTED_COBBLESTONE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	    
+	    public static final RegistryObject<Block> CORRUPTED_GRANITE_BLOCK = BLOCKS.register("corrupted_granite", () -> new CorruptedBlock(Block.Properties.from(Blocks.GRANITE).tickRandomly()));
+	    public static final RegistryObject<Item> CORRUPTED_GRANITE_BLOCK_ITEM = ITEMS.register("corrupted_granite", () -> new BlockItem(CORRUPTED_GRANITE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 		
 	    public static final RegistryObject<Block> CORRUPTED_DIRT_BLOCK = BLOCKS.register("corrupted_dirt", () -> new CorruptedBlock(Block.Properties.from(Blocks.DIRT).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_DIRT_BLOCK_ITEM = ITEMS.register("corrupted_dirt", () -> new BlockItem(CORRUPTED_DIRT_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
@@ -47,12 +50,14 @@ public class Registration {
 	    public static void mapBlockPairs() {
 	    	Map<Block, Block> map = CorruptedLandMod.corruptionPair;
 	    	map.put(Blocks.STONE, Registration.CORRUPTED_COBBLESTONE_BLOCK.get());
+	    	map.put(Blocks.GRANITE, Registration.CORRUPTED_GRANITE_BLOCK.get());
 	    	map.put(Blocks.COBBLESTONE, Registration.CORRUPTED_COBBLESTONE_BLOCK.get());
 	    	map.put(Blocks.DIRT, Registration.CORRUPTED_DIRT_BLOCK.get());
 	    	map.put(Blocks.FARMLAND, Registration.CORRUPTED_DIRT_BLOCK.get());
 	    	map.put(Blocks.GRASS_BLOCK, Registration.CORRUPTED_GRASS_BLOCK.get());
 	    	map.put(Blocks.SAND, Registration.CORRUPTED_SAND_BLOCK.get());
 	    	map.put(Blocks.GRAVEL, Registration.CORRUPTED_GRAVEL_BLOCK.get());
+	    	CorruptedLandMod.corruptionPair = map;
 	    }
 	    
  	    public static class DispenseFlesh implements IDispenseItemBehavior {

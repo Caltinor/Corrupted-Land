@@ -4,10 +4,12 @@
 	"block.dicemccl.corrupted_grass":"Corrupted Grass",
 	"block.dicemccl.corrupted_sand":"Corrupted Sand",
 	"block.dicemccl.corrupted_gravel":"Corrupted Gravel",
+	"block.dicemccl.corrupted_granite":"Corrupted Granite",
 	
 	"item.dicemccl.corrupted_dirt":"Corrupted Dirt",
 	"item.dicemccl.corrupted_cobblestone":"Corrupted Cobblestone",
 	"item.dicemccl.corrupted_grass":"Corrupted Grass",
 	"item.dicemccl.corrupted_sand":"Corrupted Sand",
-	"item.dicemccl.corrupted_gravel":"Corrupted Gravel"
+	"item.dicemccl.corrupted_gravel":"Corrupted Gravel",
+	"item.dicemccl.corrupted_granite":"Corrupted Granite"
 }

@@ -27,12 +27,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = CorruptedLandMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CorruptedLandData{
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator gen = event.getGenerator();
-		if (event.includeServer()) {
+		if (event.includeServer()) {			
 			gen.addProvider(new LootTables(gen));
 		}
 	}
@@ -64,6 +64,8 @@ public class CorruptedLandData{
 				this.registerDropping(Registration.CORRUPTED_DIRT_BLOCK.get(), Blocks.DIRT);
 				this.registerDropping(Registration.CORRUPTED_GRASS_BLOCK.get(), Blocks.DIRT);
 				this.registerDropping(Registration.CORRUPTED_SAND_BLOCK.get(), Blocks.SAND);
+				this.registerDropping(Registration.CORRUPTED_GRAVEL_BLOCK.get(), Blocks.GRAVEL);
+				this.registerDropping(Registration.CORRUPTED_GRANITE_BLOCK.get(), Blocks.GRANITE);
 			}
 			
 			@Override
