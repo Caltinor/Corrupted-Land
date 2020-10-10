@@ -9,7 +9,7 @@ license="ARR License"
 
 [[mods]] #mandatory
 modId="dicemccl" #mandatory
-version="1.1" #mandatory
+version="1.1a" #mandatory
 displayName="Corrupeted Lands" #mandatory
 #updateJSONURL=""
 description='''
