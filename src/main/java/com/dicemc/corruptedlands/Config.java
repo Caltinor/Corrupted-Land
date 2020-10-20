@@ -9,6 +9,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> HEAL_MOBS;
 	public static ForgeConfigSpec.ConfigValue<Boolean> DAMAGE_ANIMALS;
 	public static ForgeConfigSpec.ConfigValue<Integer> FLESH_DESPAWN_TIME;
+	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_EFFECT_LEVEL;
 	
 	static {
 		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
@@ -23,6 +24,10 @@ public class Config {
 		FLESH_DESPAWN_TIME = SERVER_BUILDER.comment("The speed at which flesh despawns.  setting to -1 will use vanilla default rate")
 				.define("Flesh_Despawn_Rate", -1);
 		SERVER_BUILDER.pop();
+		
+		SERVER_BUILDER.comment("Immortuos Calyx Compat Settings").push("Compat");
+		CALYX_EFFECT_LEVEL = SERVER_BUILDER.comment("The level at which Calyx Infection causes corrupted land to heal instead of poison")
+				.define("Calyx_Level", 60);
 		
 		SERVER_CONFIG = SERVER_BUILDER.build();
 	}

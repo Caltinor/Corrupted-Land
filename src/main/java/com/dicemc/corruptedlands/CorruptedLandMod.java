@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.google.gson.Gson;
+import org.apache.logging.log4j.core.util.Loader;
+
+import com.jedijoe.ImmortuosCalyx.Infection.InfectionManagerCapability;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,7 +25,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.BlockFlags;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -41,11 +42,13 @@ public class CorruptedLandMod {
 	public static Random MASTER_RAND = new Random();
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
+	public static boolean installedCalyx = false;
 
 	public CorruptedLandMod() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
 		Registration.init();
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
@@ -74,25 +77,35 @@ public class CorruptedLandMod {
 		@SubscribeEvent
 		public static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
 			if (!event.getEntity().getEntityWorld().isRemote) {
-				if (event.getEntityLiving() instanceof PlayerEntity) {					
+				if (event.getEntityLiving() instanceof PlayerEntity) {
+					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if (bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock) 
-						event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.POISON, 20, 20));
+					if (bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock)
+						if (!installedCalyx && !player.isPotionActive(Effects.POISON)) player.addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
+						else {
+							player.getCapability(InfectionManagerCapability.INSTANCE, null).ifPresent(cap -> {
+								if (cap.getInfectionProgress() >= Config.CALYX_EFFECT_LEVEL.get()) {
+									player.addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, 20, 0));}
+								else if (!player.isPotionActive(Effects.POISON)){
+									player.addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
+								}
+							});							
+						}
 				}
 				if (Config.DAMAGE_ANIMALS.get() && event.getEntityLiving() instanceof AnimalEntity) {
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if (bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock) 
-						event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.POISON, 20, 20));
+					if ((bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock) && !event.getEntityLiving().isPotionActive(Effects.POISON)) 
+						event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
 				}
 				if (Config.HEAL_MOBS.get() && event.getEntityLiving() instanceof MonsterEntity) {
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
 					if (event.getEntityLiving() instanceof ZombieEntity) {
 						if (bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock) 
-							event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 20, 20));
+							event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 20, 0));
 					}
 					else {
 						if (bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock) 
-							event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, 20, 20));
+							event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, 20, 0));
 					}
 				}
 			}
@@ -109,10 +122,11 @@ public class CorruptedLandMod {
 		public static void onServerStart(FMLServerStartingEvent event ) {
 			CorruptedLandMod.SERVER = event.getServer();
 			Registration.mapBlockPairs();
+			if (Loader.isClassAvailable("com.jedijoe.ImmortuosCalyx.Infection.InfectionManager")) {
+				CorruptedLandMod.installedCalyx = true;
+				System.out.println("Calyx Detected");
+			}
 		}
-		
-		@SubscribeEvent
-		public static void onReload(AddReloadListenerEvent event) {event.addListener(new ModReloadListener(new Gson(), "corrupted_land"));}		
 	}
 	
 	public static class Core {
