@@ -12,7 +12,13 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.1a'
+repositories {
+	maven {
+		url = "https://www.cursemaven.com"
+	}
+}
+
+version = '1.1b'
 group = 'com.yourname.modid'
 archivesBaseName = 'CorruptedLand'
 
@@ -61,6 +67,7 @@ minecraft {
 
 dependencies {
 	minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
+	compile fg.deobf("curse.maven:calyx:3083680")
 }
 
 jar {
