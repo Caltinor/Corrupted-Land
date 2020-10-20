@@ -7,6 +7,9 @@
 	"block.dicemccl.corrupted_granite":"Corrupted Granite",
 	"block.dicemccl.corrupted_andesite":"Corrupted Andesite",
 	"block.dicemccl.corrupted_diorite":"Corrupted Diorite",
+	"block.dicemccl.corrupted_coarse_dirt":"Corrupted Coarse Dirt",
+	"block.dicemccl.corrupted_red_sand":"Corrupted Red Sand",
+	"block.dicemccl.corrupted_podzol":"Corrupted Podzol",
 	
 	"item.dicemccl.corrupted_dirt":"Corrupted Dirt",
 	"item.dicemccl.corrupted_cobblestone":"Corrupted Cobblestone",
@@ -15,5 +18,8 @@
 	"item.dicemccl.corrupted_gravel":"Corrupted Gravel",
 	"item.dicemccl.corrupted_granite":"Corrupted Granite",
 	"item.dicemccl.corrupted_andesite":"Corrupted Andesite",
-	"item.dicemccl.corrupted_diorite":"Corrupted Diorite"
+	"item.dicemccl.corrupted_diorite":"Corrupted Diorite",
+	"item.dicemccl.corrupted_coarse_dirt":"Corrupted Coarse Dirt",
+	"item.dicemccl.corrupted_red_sand":"Corrupted Red Sand",
+	"item.dicemccl.corrupted_podzol":"Corrupted Podzol"
 }

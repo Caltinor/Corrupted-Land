@@ -44,11 +44,20 @@ public class Registration {
 	    public static final RegistryObject<Block> CORRUPTED_DIRT_BLOCK = BLOCKS.register("corrupted_dirt", () -> new CorruptedBlock(Block.Properties.from(Blocks.DIRT).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_DIRT_BLOCK_ITEM = ITEMS.register("corrupted_dirt", () -> new BlockItem(CORRUPTED_DIRT_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 		
+	    public static final RegistryObject<Block> CORRUPTED_PODZOL_BLOCK = BLOCKS.register("corrupted_podzol", () -> new CorruptedBlock(Block.Properties.from(Blocks.DIRT).tickRandomly()));
+	    public static final RegistryObject<Item> CORRUPTED_PODZOL_BLOCK_ITEM = ITEMS.register("corrupted_podzol", () -> new BlockItem(CORRUPTED_PODZOL_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+		
+	    public static final RegistryObject<Block> CORRUPTED_COARSE_DIRT_BLOCK = BLOCKS.register("corrupted_coarse_dirt", () -> new CorruptedBlock(Block.Properties.from(Blocks.DIRT).tickRandomly()));
+	    public static final RegistryObject<Item> CORRUPTED_COARSE_DIRT_BLOCK_ITEM = ITEMS.register("corrupted_coarse_dirt", () -> new BlockItem(CORRUPTED_COARSE_DIRT_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+			    
 	    public static final RegistryObject<Block> CORRUPTED_GRASS_BLOCK = BLOCKS.register("corrupted_grass", () -> new CorruptedBlock(Block.Properties.from(Blocks.GRASS_BLOCK).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_GRASS_BLOCK_ITEM = ITEMS.register("corrupted_grass", () -> new BlockItem(CORRUPTED_GRASS_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 	    
 	    public static final RegistryObject<Block> CORRUPTED_SAND_BLOCK = BLOCKS.register("corrupted_sand", () -> new CorruptedFallingBlock(Block.Properties.from(Blocks.SAND).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_SAND_BLOCK_ITEM = ITEMS.register("corrupted_sand", () -> new BlockItem(CORRUPTED_SAND_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	    
+	    public static final RegistryObject<Block> CORRUPTED_RED_SAND_BLOCK = BLOCKS.register("corrupted_red_sand", () -> new CorruptedFallingBlock(Block.Properties.from(Blocks.SAND).tickRandomly()));
+	    public static final RegistryObject<Item> CORRUPTED_RED_SAND_BLOCK_ITEM = ITEMS.register("corrupted_red_sand", () -> new BlockItem(CORRUPTED_RED_SAND_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 	    
 	    public static final RegistryObject<Block> CORRUPTED_GRAVEL_BLOCK = BLOCKS.register("corrupted_gravel", () -> new CorruptedFallingBlock(Block.Properties.from(Blocks.GRAVEL).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_GRAVEL_BLOCK_ITEM = ITEMS.register("corrupted_gravel", () -> new BlockItem(CORRUPTED_GRAVEL_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
@@ -65,6 +74,9 @@ public class Registration {
 	    	map.put(Blocks.GRASS_BLOCK, Registration.CORRUPTED_GRASS_BLOCK.get());
 	    	map.put(Blocks.SAND, Registration.CORRUPTED_SAND_BLOCK.get());
 	    	map.put(Blocks.GRAVEL, Registration.CORRUPTED_GRAVEL_BLOCK.get());
+	    	map.put(Blocks.COARSE_DIRT, Registration.CORRUPTED_COARSE_DIRT_BLOCK.get());
+	    	map.put(Blocks.RED_SAND, Registration.CORRUPTED_RED_SAND_BLOCK.get());
+	    	map.put(Blocks.PODZOL, Registration.CORRUPTED_PODZOL_BLOCK.get());
 	    	CorruptedLandMod.corruptionPair = map;
 	    }
 	    
