@@ -10,6 +10,11 @@
 	"block.dicemccl.corrupted_coarse_dirt":"Corrupted Coarse Dirt",
 	"block.dicemccl.corrupted_red_sand":"Corrupted Red Sand",
 	"block.dicemccl.corrupted_podzol":"Corrupted Podzol",
+	"block.dicemccl.corrupted_sandstone":"Corrupted Sandstone",
+	"block.dicemccl.corrupted_red_sandstone":"Corrupted Red Sandstone",
+	"block.dicemccl.corrupted_mossy_cobblestone":"Corrupted Mossy Cobblestone",
+	"block.dicemccl.corrupted_obsidian":"Corrupted Obsidian",
+	"block.dicemccl.corrupted_ice":"Corrupted Ice",
 	
 	"item.dicemccl.corrupted_dirt":"Corrupted Dirt",
 	"item.dicemccl.corrupted_cobblestone":"Corrupted Cobblestone",
@@ -21,5 +26,10 @@
 	"item.dicemccl.corrupted_diorite":"Corrupted Diorite",
 	"item.dicemccl.corrupted_coarse_dirt":"Corrupted Coarse Dirt",
 	"item.dicemccl.corrupted_red_sand":"Corrupted Red Sand",
-	"item.dicemccl.corrupted_podzol":"Corrupted Podzol"
+	"item.dicemccl.corrupted_podzol":"Corrupted Podzol",
+	"item.dicemccl.corrupted_sandstone":"Corrupted Sandstone",
+	"item.dicemccl.corrupted_red_sandstone":"Corrupted red Sandstone",
+	"item.dicemccl.corrupted_mossy_cobblestone":"Corrupted Mossy Cobblestone",
+	"item.dicemccl.corrupted_obsidian":"Corrupted Obsidian",
+	"item.dicemccl.corrupted_ice":"Corrupted Ice"
 }

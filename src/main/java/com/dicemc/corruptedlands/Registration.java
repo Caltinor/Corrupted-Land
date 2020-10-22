@@ -32,6 +32,21 @@ public class Registration {
 		public static final RegistryObject<Block> CORRUPTED_COBBLESTONE_BLOCK = BLOCKS.register("corrupted_cobblestone", () -> new CorruptedBlock(Block.Properties.from(Blocks.COBBLESTONE).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_COBBLESTONE_BLOCK_ITEM = ITEMS.register("corrupted_cobblestone", () -> new BlockItem(CORRUPTED_COBBLESTONE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 	    
+	    public static final RegistryObject<Block> CORRUPTED_OBSIDIAN_BLOCK = BLOCKS.register("corrupted_obsidian", () -> new CorruptedBlock(Block.Properties.from(Blocks.OBSIDIAN).tickRandomly()));
+	    public static final RegistryObject<Item> CORRUPTED_OBSIDIAN_BLOCK_ITEM = ITEMS.register("corrupted_obsidian", () -> new BlockItem(CORRUPTED_OBSIDIAN_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	    
+	    public static final RegistryObject<Block> CORRUPTED_ICE_BLOCK = BLOCKS.register("corrupted_ice", () -> new CorruptedBreakableBlock(Block.Properties.from(Blocks.ICE).tickRandomly().noDrops()));
+	    public static final RegistryObject<Item> CORRUPTED_ICE_BLOCK_ITEM = ITEMS.register("corrupted_ice", () -> new BlockItem(CORRUPTED_ICE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	    
+	    public static final RegistryObject<Block> CORRUPTED_MOSSY_COBBLESTONE_BLOCK = BLOCKS.register("corrupted_mossy_cobblestone", () -> new CorruptedBlock(Block.Properties.from(Blocks.MOSSY_COBBLESTONE).tickRandomly()));
+	    public static final RegistryObject<Item> CORRUPTED_MOSSY_COBBLESTONE_BLOCK_ITEM = ITEMS.register("corrupted_mossy_cobblestone", () -> new BlockItem(CORRUPTED_MOSSY_COBBLESTONE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	    
+	    public static final RegistryObject<Block> CORRUPTED_RED_SANDSTONE_BLOCK = BLOCKS.register("corrupted_red_sandstone", () -> new CorruptedBlock(Block.Properties.from(Blocks.RED_SANDSTONE).tickRandomly()));
+	    public static final RegistryObject<Item> CORRUPTED_RED_SANDSTONE_BLOCK_ITEM = ITEMS.register("corrupted_red_sandstone", () -> new BlockItem(CORRUPTED_RED_SANDSTONE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	    
+	    public static final RegistryObject<Block> CORRUPTED_SANDSTONE_BLOCK = BLOCKS.register("corrupted_sandstone", () -> new CorruptedBlock(Block.Properties.from(Blocks.SANDSTONE).tickRandomly()));
+	    public static final RegistryObject<Item> CORRUPTED_SANDSTONE_BLOCK_ITEM = ITEMS.register("corrupted_sandstone", () -> new BlockItem(CORRUPTED_SANDSTONE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
+	    
 	    public static final RegistryObject<Block> CORRUPTED_GRANITE_BLOCK = BLOCKS.register("corrupted_granite", () -> new CorruptedBlock(Block.Properties.from(Blocks.GRANITE).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_GRANITE_BLOCK_ITEM = ITEMS.register("corrupted_granite", () -> new BlockItem(CORRUPTED_GRANITE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 	    
@@ -77,6 +92,16 @@ public class Registration {
 	    	map.put(Blocks.COARSE_DIRT, Registration.CORRUPTED_COARSE_DIRT_BLOCK.get());
 	    	map.put(Blocks.RED_SAND, Registration.CORRUPTED_RED_SAND_BLOCK.get());
 	    	map.put(Blocks.PODZOL, Registration.CORRUPTED_PODZOL_BLOCK.get());
+	    	map.put(Blocks.SANDSTONE, Registration.CORRUPTED_SANDSTONE_BLOCK.get());
+	    	map.put(Blocks.RED_SANDSTONE, Registration.CORRUPTED_RED_SANDSTONE_BLOCK.get());
+	    	map.put(Blocks.MOSSY_COBBLESTONE, Registration.CORRUPTED_MOSSY_COBBLESTONE_BLOCK.get());
+	    	map.put(Blocks.LAVA, Registration.CORRUPTED_OBSIDIAN_BLOCK.get());
+	    	map.put(Blocks.OBSIDIAN, Registration.CORRUPTED_OBSIDIAN_BLOCK.get());
+	    	map.put(Blocks.CRYING_OBSIDIAN, Registration.CORRUPTED_OBSIDIAN_BLOCK.get());
+	    	map.put(Blocks.ICE, Registration.CORRUPTED_ICE_BLOCK.get());
+	    	map.put(Blocks.WATER, Registration.CORRUPTED_ICE_BLOCK.get());
+	    	map.put(Blocks.BLUE_ICE, Registration.CORRUPTED_ICE_BLOCK.get());
+	    	map.put(Blocks.PACKED_ICE, Registration.CORRUPTED_ICE_BLOCK.get());
 	    	CorruptedLandMod.corruptionPair = map;
 	    }
 	    
