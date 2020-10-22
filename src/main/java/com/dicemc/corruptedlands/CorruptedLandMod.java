@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -45,6 +46,7 @@ public class CorruptedLandMod {
 	public static boolean installedCalyx = false;
 
 	public CorruptedLandMod() {
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
 		Registration.init();
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
@@ -80,7 +82,7 @@ public class CorruptedLandMod {
 				if (event.getEntityLiving() instanceof PlayerEntity) {
 					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if (bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock)
+					if (bs.getBlock() instanceof ICorrupted)
 						if (!installedCalyx && !player.isPotionActive(Effects.POISON)) player.addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
 						else {
 							player.getCapability(InfectionManagerCapability.INSTANCE, null).ifPresent(cap -> {
@@ -94,17 +96,17 @@ public class CorruptedLandMod {
 				}
 				if (Config.DAMAGE_ANIMALS.get() && event.getEntityLiving() instanceof AnimalEntity) {
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if ((bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock) && !event.getEntityLiving().isPotionActive(Effects.POISON)) 
+					if ((bs.getBlock() instanceof ICorrupted) && !event.getEntityLiving().isPotionActive(Effects.POISON)) 
 						event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
 				}
 				if (Config.HEAL_MOBS.get() && event.getEntityLiving() instanceof MonsterEntity) {
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if (event.getEntityLiving() instanceof ZombieEntity) {
-						if (bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock) 
+					if (event.getEntityLiving() instanceof ZombieEntity || event.getEntityLiving() instanceof AbstractSkeletonEntity) {
+						if (bs.getBlock() instanceof ICorrupted) 
 							event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 20, 0));
 					}
 					else {
-						if (bs.getBlock() instanceof CorruptedBlock || bs.getBlock() instanceof CorruptedFallingBlock) 
+						if (bs.getBlock() instanceof ICorrupted) 
 							event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, 20, 0));
 					}
 				}
