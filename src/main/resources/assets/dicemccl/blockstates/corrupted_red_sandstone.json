@@ -1,0 +1,5 @@
+{
+	"variants": {
+		"": { "model":"dicemccl:block/corrupted_red_sandstone" }
+	}
+}
