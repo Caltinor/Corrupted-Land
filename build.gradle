@@ -18,7 +18,7 @@ repositories {
 	}
 }
 
-version = '1.1b'
+version = '1.1c'
 group = 'com.yourname.modid'
 archivesBaseName = 'CorruptedLand'
 
@@ -33,6 +33,7 @@ minecraft {
             workingDirectory project.file('run')
             //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.disableRefMap', 'true'
             mods {
                 examplemod {
                     source sourceSets.main
@@ -55,6 +56,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.disableRefMap', 'true'
             args '--mod', 'dicemccl', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 examplemod {
@@ -68,6 +70,7 @@ minecraft {
 dependencies {
 	minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
 	compile fg.deobf("curse.maven:calyx:3083680")
+	compile fg.deobf("curse.maven:paranoia:3088671")
 }
 
 jar {
