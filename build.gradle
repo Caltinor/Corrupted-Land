@@ -13,9 +13,9 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 repositories {
-	maven {
-		url = "https://www.cursemaven.com"
-	}
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 version = '1.1c'
@@ -68,9 +68,9 @@ minecraft {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
-	compile fg.deobf("curse.maven:calyx:3083680")
-	compile fg.deobf("curse.maven:paranoia:3088671")
+    minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
+    compile fg.deobf("curse.maven:calyx:3083680")
+    compile fg.deobf("curse.maven:paranoia:3088671")
 }
 
 jar {
@@ -99,5 +99,29 @@ publishing {
         maven {
             url "file:///${project.projectDir}/mcmodsrepo"
         }
+    }
+}
+
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+processResources {
+    
+    doLast {
+    
+        def jsonMinifyStart = System.currentTimeMillis()
+        def jsonMinified = 0
+        def jsonBytesSaved = 0
+        
+        fileTree(dir: outputs.files.asPath, include: '**/*.json').each {
+        
+            File file = it
+            jsonMinified++
+            def oldLength = file.length()
+            file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
+            jsonBytesSaved += oldLength - file.length()
+        }
+        
+        println('Minified ' + jsonMinified + ' json files. Saved ' + jsonBytesSaved + ' bytes. Took ' + (System.currentTimeMillis() - jsonMinifyStart) + 'ms.')
     }
 }
