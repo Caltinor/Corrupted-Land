@@ -26,7 +26,7 @@ public class Registration {
 		
 		public static void init() {
 			BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-			ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());;
+			ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		}
 		
 		public static final RegistryObject<Block> CORRUPTED_COBBLESTONE_BLOCK = BLOCKS.register("corrupted_cobblestone", () -> new CorruptedBlock(Block.Properties.from(Blocks.COBBLESTONE).tickRandomly()));

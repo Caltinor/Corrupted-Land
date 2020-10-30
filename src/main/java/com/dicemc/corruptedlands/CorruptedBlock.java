@@ -24,6 +24,7 @@ public class CorruptedBlock extends Block implements ICorrupted{
 		if (threshold >= Config.SPREAD_RATE.get()) Core.corruptNeighbors(pos, worldIn);	
 	}
 	
+	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
 		if (!entityIn.isImmuneToFire() && entityIn instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)entityIn) && this.equals(Registration.CORRUPTED_OBSIDIAN_BLOCK.get())) {
 			entityIn.attackEntityFrom(DamageSource.HOT_FLOOR, 1.0F);
