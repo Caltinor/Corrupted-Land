@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.util.Loader;
 
 import com.jedijoe.ImmortuosCalyx.Infection.InfectionManagerCapability;
@@ -40,6 +42,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(CorruptedLandMod.MOD_ID)
 public class CorruptedLandMod {
 	public static final String MOD_ID = "dicemccl";
+	public static final Logger LOG = LogManager.getLogger(MOD_ID);
 	public static Random MASTER_RAND = new Random();
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
@@ -126,7 +129,7 @@ public class CorruptedLandMod {
 			Registration.mapBlockPairs();
 			if (Loader.isClassAvailable("com.jedijoe.ImmortuosCalyx.Infection.InfectionManager")) {
 				CorruptedLandMod.installedCalyx = true;
-				System.out.println("Calyx Detected");
+				LOG.info("Calyx detected. Initializing support.");
 			}
 		}
 	}
