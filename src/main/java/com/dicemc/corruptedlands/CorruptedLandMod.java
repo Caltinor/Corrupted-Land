@@ -142,11 +142,11 @@ public class CorruptedLandMod {
 		}
 		
 		public static void corruptNeighbors(BlockPos pos, ServerWorld serverWorld) {
-			BlockPos neighbor = getRandomNeighbor(pos, serverWorld);
+			BlockPos neighbor = getRandomNeighbor(pos);
 			if (isNeighboredByAir(neighbor, serverWorld)) { corruptLand(neighbor, serverWorld);}			
 		}
 		
-		private static BlockPos getRandomNeighbor(BlockPos pos, ServerWorld serverWorld) {
+		private static BlockPos getRandomNeighbor(BlockPos pos) {
 			int next = CorruptedLandMod.MASTER_RAND.nextInt(3);
 			int x = (next == 2 ? pos.getX() + 1 : (next == 1 ? pos.getX() : pos.getX() - 1));
 			next = CorruptedLandMod.MASTER_RAND.nextInt(3);
