@@ -21,7 +21,7 @@ public class CommonSetup {
                 Items.ROTTEN_FLESH,
                 new Registration.DispenseFlesh()));
         if (ModList.get().isLoaded("paranoia")) {
-        	System.out.println("Paranoia Detected by Corrupted Land");
+        	CorruptedLandMod.LOG.info("Paranoia dectected! Initializing support.");
         	Predicate<ServerPlayerEntity> pred = player -> (
         			player.world.getBlockState(player.getPosition().down()).getBlock() instanceof ICorrupted);
         	SanityCallbacks.registerMultiplier(pred, Config.PARANOIA_MODIFIER.get());

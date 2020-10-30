@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.util.Loader;
 
 import com.jedijoe.ImmortuosCalyx.Infection.InfectionManagerCapability;
@@ -40,6 +42,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(CorruptedLandMod.MOD_ID)
 public class CorruptedLandMod {
 	public static final String MOD_ID = "dicemccl";
+	public static final Logger LOG = LogManager.getLogger(MOD_ID);
 	public static Random MASTER_RAND = new Random();
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
@@ -82,7 +85,7 @@ public class CorruptedLandMod {
 				if (event.getEntityLiving() instanceof PlayerEntity) {
 					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if (bs.getBlock() instanceof ICorrupted)
+					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted)
 						if (!installedCalyx && !player.isPotionActive(Effects.POISON)) player.addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
 						else {
 							player.getCapability(InfectionManagerCapability.INSTANCE, null).ifPresent(cap -> {
@@ -126,7 +129,7 @@ public class CorruptedLandMod {
 			Registration.mapBlockPairs();
 			if (Loader.isClassAvailable("com.jedijoe.ImmortuosCalyx.Infection.InfectionManager")) {
 				CorruptedLandMod.installedCalyx = true;
-				System.out.println("Calyx Detected");
+				LOG.info("Calyx detected. Initializing support.");
 			}
 		}
 	}
@@ -139,11 +142,11 @@ public class CorruptedLandMod {
 		}
 		
 		public static void corruptNeighbors(BlockPos pos, ServerWorld serverWorld) {
-			BlockPos neighbor = getRandomNeighbor(pos, serverWorld);
+			BlockPos neighbor = getRandomNeighbor(pos);
 			if (isNeighboredByAir(neighbor, serverWorld)) { corruptLand(neighbor, serverWorld);}			
 		}
 		
-		private static BlockPos getRandomNeighbor(BlockPos pos, ServerWorld serverWorld) {
+		private static BlockPos getRandomNeighbor(BlockPos pos) {
 			int next = CorruptedLandMod.MASTER_RAND.nextInt(3);
 			int x = (next == 2 ? pos.getX() + 1 : (next == 1 ? pos.getX() : pos.getX() - 1));
 			next = CorruptedLandMod.MASTER_RAND.nextInt(3);
