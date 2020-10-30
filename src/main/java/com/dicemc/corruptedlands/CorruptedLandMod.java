@@ -82,7 +82,7 @@ public class CorruptedLandMod {
 				if (event.getEntityLiving() instanceof PlayerEntity) {
 					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if (bs.getBlock() instanceof ICorrupted)
+					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted)
 						if (!installedCalyx && !player.isPotionActive(Effects.POISON)) player.addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
 						else {
 							player.getCapability(InfectionManagerCapability.INSTANCE, null).ifPresent(cap -> {
