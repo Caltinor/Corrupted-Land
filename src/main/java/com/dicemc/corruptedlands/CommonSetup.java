@@ -2,6 +2,8 @@ package com.dicemc.corruptedlands;
 
 import java.util.function.Predicate;
 
+import com.dicemc.corruptedlands.blocks.ICorrupted;
+
 import io.github.championash5357.paranoia.api.callback.SanityCallbacks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.player.ServerPlayerEntity;

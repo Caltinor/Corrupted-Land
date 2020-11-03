@@ -2,6 +2,11 @@ package com.dicemc.corruptedlands;
 
 import java.util.Map;
 
+import com.dicemc.corruptedlands.blocks.CorruptedBlock;
+import com.dicemc.corruptedlands.blocks.CorruptedBreakableBlock;
+import com.dicemc.corruptedlands.blocks.CorruptedFallingBlock;
+import com.dicemc.corruptedlands.items.PurifierItem;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
@@ -28,6 +33,8 @@ public class Registration {
 			BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 			ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		}
+		
+		public static final RegistryObject<Item> PURIFIER = ITEMS.register("purifier", () -> new PurifierItem(new Item.Properties().group(ItemGroup.MISC).maxDamage(20000)));
 		
 		public static final RegistryObject<Block> CORRUPTED_COBBLESTONE_BLOCK = BLOCKS.register("corrupted_cobblestone", () -> new CorruptedBlock(Block.Properties.from(Blocks.COBBLESTONE).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_COBBLESTONE_BLOCK_ITEM = ITEMS.register("corrupted_cobblestone", () -> new BlockItem(CORRUPTED_COBBLESTONE_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));

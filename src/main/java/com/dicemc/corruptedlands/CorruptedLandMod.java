@@ -8,6 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.util.Loader;
 
+import com.dicemc.corruptedlands.blocks.ICorrupted;
+import com.dicemc.corruptedlands.items.PurifierItem;
+import com.dicemc.corruptedlands.items.PurifierRecipe;
 import com.jedijoe.ImmortuosCalyx.Infection.InfectionManagerCapability;
 
 import net.minecraft.block.Block;
@@ -21,6 +24,8 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
@@ -28,6 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.BlockFlags;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -54,6 +60,7 @@ public class CorruptedLandMod {
 		Registration.init();
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
@@ -84,6 +91,12 @@ public class CorruptedLandMod {
 			if (!event.getEntity().getEntityWorld().isRemote) {
 				if (event.getEntityLiving() instanceof PlayerEntity) {
 					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+					//purifier stone charge check
+					if (player.getEntityWorld().canSeeSky(player.getPosition()) && player.getEntityWorld().isDaytime())	{
+						if (player.getHeldItemMainhand().getItem() instanceof PurifierItem) player.getHeldItemMainhand().damageItem(Config.PURIFIER_RECHARGE_RATE.get(), player, (p) -> {});
+						if (player.getHeldItemOffhand().getItem() instanceof PurifierItem) player.getHeldItemOffhand().damageItem(Config.PURIFIER_RECHARGE_RATE.get(), player, (p) -> {});
+					}
+					//Corruption check
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
 					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted)
 						if (!installedCalyx && !player.isPotionActive(Effects.POISON)) player.addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
@@ -171,4 +184,11 @@ public class CorruptedLandMod {
 			return false;
 		}
 	}
+	
+	public void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event)
+    {
+        event.getRegistry().registerAll(
+                new SpecialRecipeSerializer<>(PurifierRecipe::new).setRegistryName("dicemccl:purifier")
+        );
+    }
 }

@@ -10,6 +10,9 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> HEAL_MOBS;
 	public static ForgeConfigSpec.ConfigValue<Boolean> DAMAGE_ANIMALS;
 	public static ForgeConfigSpec.ConfigValue<Integer> FLESH_DESPAWN_TIME;
+	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_RANGE;
+	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_RECHARGE_RATE;
+	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_DRAIN_RATE;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_EFFECT_LEVEL;
 	public static ForgeConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
 	
@@ -26,6 +29,12 @@ public class Config {
 				.define("Damage_Animals", true);
 		FLESH_DESPAWN_TIME = SERVER_BUILDER.comment("The speed at which flesh despawns.  setting to -1 will use vanilla default rate")
 				.define("Flesh_Despawn_Rate", -1);
+		PURIFIER_RANGE = SERVER_BUILDER.comment("the AOE of the purifier")
+				.define("Purifer Range", 5);
+		PURIFIER_RECHARGE_RATE = SERVER_BUILDER.comment("Rate that sunlight recharges purifiers.  must be negative. the more negative the faster the charge.")
+				.defineInRange("Purifier Recharge Rate", -1, -20000, 0);
+		PURIFIER_DRAIN_RATE = SERVER_BUILDER.comment("How much damage per block the purifier takes when used. Default 20")
+				.defineInRange("Purifier Drain Rate", 20, 0, Integer.MAX_VALUE);
 		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.comment("Compat Settings").push("Compat");

@@ -1,7 +1,8 @@
-package com.dicemc.corruptedlands;
+package com.dicemc.corruptedlands.blocks;
 
 import java.util.Random;
 
+import com.dicemc.corruptedlands.Config;
 import com.dicemc.corruptedlands.CorruptedLandMod.Core;
 
 import net.minecraft.block.BlockState;

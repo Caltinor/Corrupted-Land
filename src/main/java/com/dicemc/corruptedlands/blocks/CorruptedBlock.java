@@ -1,7 +1,9 @@
-package com.dicemc.corruptedlands;
+package com.dicemc.corruptedlands.blocks;
 
 import java.util.Random;
 
+import com.dicemc.corruptedlands.Config;
+import com.dicemc.corruptedlands.Registration;
 import com.dicemc.corruptedlands.CorruptedLandMod.Core;
 
 import net.minecraft.block.Block;
@@ -16,7 +18,7 @@ import net.minecraft.world.server.ServerWorld;
 
 public class CorruptedBlock extends Block implements ICorrupted{
 
-	protected CorruptedBlock(Properties builder) { super(builder);}
+	public CorruptedBlock(Properties builder) { super(builder);}
 
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
