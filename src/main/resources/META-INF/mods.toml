@@ -10,7 +10,7 @@ license="ARR License"
 [[mods]] #mandatory
 modId="dicemccl" #mandatory
 version="1.1d" #mandatory
-displayName="Corrupeted Lands" #mandatory
+displayName="Corrupted Lands" #mandatory
 #updateJSONURL=""
 description='''
 A SpookyJam Mod.

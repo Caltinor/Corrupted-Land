@@ -26,7 +26,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'snapshot', version: '20200916-1.16.2'
+    mappings channel: 'snapshot', version: '20201028-1.16.3'
 
     runs {
         client {
@@ -45,6 +45,7 @@ minecraft {
             workingDirectory project.file('run')
             //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.disableRefMap', 'true'
             mods {
                 examplemod {
                     source sourceSets.main
@@ -69,8 +70,8 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
-    compile fg.deobf("curse.maven:calyx:3083680")
-    compile fg.deobf("curse.maven:paranoia:3088671")
+    compile fg.deobf("curse.maven:calyx:3101228")
+    compile fg.deobf("curse.maven:paranoia:3099326")
 }
 
 jar {
