@@ -37,13 +37,10 @@ public class Config {
 				.defineInRange("Purifier Drain Rate", 20, 0, Integer.MAX_VALUE);
 		SERVER_BUILDER.pop();
 		
-		SERVER_BUILDER.comment("Compat Settings").push("Compat");
-		CALYX_EFFECT_LEVEL = SERVER_BUILDER.comment("The level at which Calyx Infection causes corrupted land to heal instead of poison")
-				.define("Calyx_Level", 60);
-		SERVER_BUILDER.pop();
-		
 		COMMON_BUILDER.comment("Compat Settings").push("Compat");
-		PARANOIA_MODIFIER = SERVER_BUILDER.comment("value between -1 and 1 to define the rate at which corrupted land impacts paranoia.")
+		CALYX_EFFECT_LEVEL = COMMON_BUILDER.comment("The level at which Calyx Infection causes corrupted land to heal instead of poison")
+				.define("Calyx_Level", 60);
+		PARANOIA_MODIFIER = COMMON_BUILDER.comment("value between -1 and 1 to define the rate at which corrupted land impacts paranoia.")
 				.defineInRange("Paranoia_Modifier", 0.001, -1d, 1d);
 		COMMON_BUILDER.pop();
 		
