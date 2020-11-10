@@ -4,6 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.dicemc.corruptedlands.blocks.IPreventCorruption;
+import com.dicemc.corruptedlands.items.mystical_pumpkins.CorruptedPumpkinItem;
+import com.dicemc.corruptedlands.items.mystical_pumpkins.PureHeartedPumpkinItem;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.util.Loader;
@@ -89,6 +97,35 @@ public class CorruptedLandMod {
 		@SubscribeEvent
 		public static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
 			if (!event.getEntity().getEntityWorld().isRemote) {
+				World worldIn = event.getEntityLiving().world;
+				BlockPos pos = event.getEntity().getPosition();
+				Entity entityIn = event.getEntity();
+				
+				int range = 9;
+				for (int y = -range; y <= range; y++) {
+					for (int x = -(range-Math.abs(y)); x <= (range-Math.abs(y)); x++) {
+						for (int z = -(range-Math.abs(y)); z <= (range-Math.abs(y)); z++) {
+							Vector3d pos2 = new Vector3d(pos.getX(),pos.getY(),pos.getZ()).add(x, y, z).add(0,0,0);
+							BlockPos pos3 = pos.add(x,y,z);
+							if (worldIn.getBlockState(pos3).getBlock() instanceof IPreventCorruption) {
+								IPreventCorruption preventor = ((IPreventCorruption)worldIn.getBlockState(pos3).getBlock());
+								if (!preventor.allowSpread() && pos2.squareDistanceTo(pos.getX(),pos.getY(),pos.getZ()) <= preventor.getRange()) {
+									return;
+								}
+							}
+						}
+					}
+				}
+				
+				if(entityIn instanceof LivingEntity) {
+					if (
+							((LivingEntity)entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof CorruptedPumpkinItem ||
+									((LivingEntity)entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof PureHeartedPumpkinItem
+					) {
+						return;
+					}
+				}
+				
 				if (event.getEntityLiving() instanceof PlayerEntity) {
 					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 					//purifier stone charge check
@@ -151,7 +188,7 @@ public class CorruptedLandMod {
 		public static void corruptLand(BlockPos pos, ServerWorld serverWorld) {
 			BlockState current = serverWorld.getBlockState(pos);
 			BlockState future = corruptionPair.getOrDefault(current.getBlock(), Blocks.AIR.getBlock()).getDefaultState();
-			if (!future.equals(Blocks.AIR.getDefaultState())) serverWorld.setBlockState(pos, future, BlockFlags.BLOCK_UPDATE);
+			if (!(current instanceof IPreventCorruption) && !future.equals(Blocks.AIR.getDefaultState())) serverWorld.setBlockState(pos, future, BlockFlags.BLOCK_UPDATE);
 		}
 		
 		public static void corruptNeighbors(BlockPos pos, ServerWorld serverWorld) {

@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 
 import com.dicemc.corruptedlands.blocks.ICorrupted;
 
+import com.dicemc.corruptedlands.recipes.MysticalPumpkins;
 import io.github.championash5357.paranoia.api.callback.SanityCallbacks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -28,5 +29,9 @@ public class CommonSetup {
         			player.world.getBlockState(player.getPosition().down()).getBlock() instanceof ICorrupted);
         	SanityCallbacks.registerMultiplier(pred, Config.PARANOIA_MODIFIER.get());
         }
+        
+        if (ModList.get().isLoaded("mystical_pumpkins")) {
+			MysticalPumpkins.init();
+		}
     }
 }

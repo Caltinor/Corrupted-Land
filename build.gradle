@@ -72,6 +72,9 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
     compile fg.deobf("curse.maven:calyx:3101228")
     compile fg.deobf("curse.maven:paranoia:3099326")
+
+    compileOnly fg.deobf("curse.maven:mystical-pumpkins:3104400")
+    implementation fg.deobf("curse.maven:geckolib:3071704")
 }
 
 jar {

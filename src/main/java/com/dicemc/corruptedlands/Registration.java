@@ -1,10 +1,15 @@
 package com.dicemc.corruptedlands;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.dicemc.corruptedlands.blocks.CorruptedBlock;
 import com.dicemc.corruptedlands.blocks.CorruptedBreakableBlock;
 import com.dicemc.corruptedlands.blocks.CorruptedFallingBlock;
+import com.dicemc.corruptedlands.blocks.mystical_pumpkins.CorruptedPumpkinBlock;
+import com.dicemc.corruptedlands.blocks.mystical_pumpkins.PureHeartedPumpkinBlock;
+import com.dicemc.corruptedlands.items.mystical_pumpkins.CorruptedPumpkinItem;
+import com.dicemc.corruptedlands.items.mystical_pumpkins.PureHeartedPumpkinItem;
 import com.dicemc.corruptedlands.items.PurifierItem;
 
 import net.minecraft.block.Block;
@@ -20,10 +25,12 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class Registration {
 		public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, CorruptedLandMod.MOD_ID);
@@ -148,4 +155,17 @@ public class Registration {
 			protected void playDispenseSound(IBlockSource source) {source.getWorld().playEvent(1000, source.getBlockPos(), 0);}
 			protected void spawnDispenseParticles(IBlockSource source, Direction facingIn) {source.getWorld().playEvent(2000, source.getBlockPos(), facingIn.getIndex());}
 	    }
+	    
+	public static final RegistryObject<Block> CORRUPTED_PUMPKIN_BLOCK = doIMCRegistry("mystical_pumpkins", "corrupted_pumpkin", () -> CorruptedPumpkinBlock::new, BLOCKS);
+	public static final RegistryObject<Item> CORRUPTED_PUMPKIN_ITEM = doIMCRegistry("mystical_pumpkins", "corrupted_pumkin", () -> CorruptedPumpkinItem::instance, ITEMS);
+	
+	public static final RegistryObject<Block> PURE_HEARTED_PUMPKIN_BLOCK = doIMCRegistry("mystical_pumpkins", "pure_hearted_pumkin", () -> PureHeartedPumpkinBlock::new, BLOCKS);
+	public static final RegistryObject<Item> PURE_HEARTED_PUMPKIN_ITEM = doIMCRegistry("mystical_pumpkins", "pure_hearted_pumkin", () -> PureHeartedPumpkinItem::instance, ITEMS);
+	
+	private static <T extends IForgeRegistryEntry<T>> RegistryObject<T> doIMCRegistry(String modID, String id, Supplier<Supplier<T>> object, DeferredRegister<T> register) {
+		if (ModList.get().isLoaded(modID)) {
+			return register.register(id, object.get());
+		}
+		return null;
+	}
 }
