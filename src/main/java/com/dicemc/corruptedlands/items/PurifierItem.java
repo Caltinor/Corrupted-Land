@@ -34,7 +34,7 @@ public class PurifierItem extends Item{
 						p = new BlockPos(x, y, z);
 						s = context.getWorld().getBlockState(p);
 						if (s.getBlock() instanceof ICorrupted) {
-							if (context.getItem().getDamage() <= (context.getItem().getMaxDamage() - (Config.PURIFIER_DRAIN_RATE.get() + 1))) {
+							if (context.getItem().getDamage() <= (context.getItem().getMaxDamage() - (Config.PURIFIER_DRAIN_RATE.get() * 2))) {
 								List<ItemStack> drop = Block.getDrops(s, context.getPlayer().getServer().func_241755_D_(), p, null);
 								context.getWorld().setBlockState(p, (drop.size() == 0 ? Blocks.AIR.getDefaultState() : Block.getBlockFromItem(drop.get(0).getItem()).getDefaultState()));
 								context.getItem().damageItem(Config.PURIFIER_DRAIN_RATE.get(), context.getPlayer(), (player) -> {});
