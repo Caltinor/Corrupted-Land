@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.ModList;
 
 public class CorruptedBlock extends Block implements ICorrupted{
 
@@ -52,13 +53,15 @@ public class CorruptedBlock extends Block implements ICorrupted{
 	
 	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
-		if(entityIn instanceof LivingEntity) {
-			if (
-					((LivingEntity)entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof CorruptedPumpkinItem ||
-							((LivingEntity)entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof PureHeartedPumpkinItem
-			) {
-				super.onEntityWalk(worldIn, pos, entityIn);
-				return;
+		if (ModList.get().isLoaded("mystical_pumpkins")) {
+			if (entityIn instanceof LivingEntity) {
+				if (
+						((LivingEntity) entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof CorruptedPumpkinItem ||
+								((LivingEntity) entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof PureHeartedPumpkinItem
+				) {
+					super.onEntityWalk(worldIn, pos, entityIn);
+					return;
+				}
 			}
 		}
 		

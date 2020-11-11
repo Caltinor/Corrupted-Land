@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.ModList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.util.Loader;
@@ -117,12 +118,14 @@ public class CorruptedLandMod {
 					}
 				}
 				
-				if(entityIn instanceof LivingEntity) {
-					if (
-							((LivingEntity)entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof CorruptedPumpkinItem ||
-									((LivingEntity)entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof PureHeartedPumpkinItem
-					) {
-						return;
+				if (ModList.get().isLoaded("mystical_pumpkins")) {
+					if(entityIn instanceof LivingEntity) {
+						if (
+								((LivingEntity)entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof CorruptedPumpkinItem ||
+										((LivingEntity)entityIn).getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() instanceof PureHeartedPumpkinItem
+						) {
+							return;
+						}
 					}
 				}
 				
