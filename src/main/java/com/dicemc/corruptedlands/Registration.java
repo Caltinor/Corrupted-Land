@@ -91,6 +91,12 @@ public class Registration {
 	    public static final RegistryObject<Block> CORRUPTED_GRAVEL_BLOCK = BLOCKS.register("corrupted_gravel", () -> new CorruptedFallingBlock(Block.Properties.from(Blocks.GRAVEL).tickRandomly()));
 	    public static final RegistryObject<Item> CORRUPTED_GRAVEL_BLOCK_ITEM = ITEMS.register("corrupted_gravel", () -> new BlockItem(CORRUPTED_GRAVEL_BLOCK.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
 
+		public static final RegistryObject<Block> CORRUPTED_PUMPKIN_BLOCK = doIMCRegistry("mystical_pumpkins", "corrupted_pumpkin", () -> CorruptedPumpkinBlock::new, BLOCKS);
+		public static final RegistryObject<Item> CORRUPTED_PUMPKIN_ITEM = doIMCRegistry("mystical_pumpkins", "corrupted_pumkin", () -> CorruptedPumpkinItem::instance, ITEMS);
+		
+		public static final RegistryObject<Block> PURE_HEARTED_PUMPKIN_BLOCK = doIMCRegistry("mystical_pumpkins", "pure_hearted_pumkin", () -> PureHeartedPumpkinBlock::new, BLOCKS);
+		public static final RegistryObject<Item> PURE_HEARTED_PUMPKIN_ITEM = doIMCRegistry("mystical_pumpkins", "pure_hearted_pumkin", () -> PureHeartedPumpkinItem::instance, ITEMS);
+
 	    public static void mapBlockPairs() {
 	    	Map<Block, Block> map = CorruptedLandMod.corruptionPair;
 	    	map.put(Blocks.STONE, Registration.CORRUPTED_COBBLESTONE_BLOCK.get());
@@ -116,6 +122,9 @@ public class Registration {
 	    	map.put(Blocks.WATER, Registration.CORRUPTED_ICE_BLOCK.get());
 	    	map.put(Blocks.BLUE_ICE, Registration.CORRUPTED_ICE_BLOCK.get());
 	    	map.put(Blocks.PACKED_ICE, Registration.CORRUPTED_ICE_BLOCK.get());
+	    	if (ModList.get().isLoaded("mystical_pumpkins")) {
+				map.put(Blocks.CARVED_PUMPKIN, Registration.CORRUPTED_PUMPKIN_BLOCK.get());
+			}
 	    	CorruptedLandMod.corruptionPair = map;
 	    }
 	    
@@ -155,12 +164,6 @@ public class Registration {
 			protected void playDispenseSound(IBlockSource source) {source.getWorld().playEvent(1000, source.getBlockPos(), 0);}
 			protected void spawnDispenseParticles(IBlockSource source, Direction facingIn) {source.getWorld().playEvent(2000, source.getBlockPos(), facingIn.getIndex());}
 	    }
-	    
-	public static final RegistryObject<Block> CORRUPTED_PUMPKIN_BLOCK = doIMCRegistry("mystical_pumpkins", "corrupted_pumpkin", () -> CorruptedPumpkinBlock::new, BLOCKS);
-	public static final RegistryObject<Item> CORRUPTED_PUMPKIN_ITEM = doIMCRegistry("mystical_pumpkins", "corrupted_pumkin", () -> CorruptedPumpkinItem::instance, ITEMS);
-	
-	public static final RegistryObject<Block> PURE_HEARTED_PUMPKIN_BLOCK = doIMCRegistry("mystical_pumpkins", "pure_hearted_pumkin", () -> PureHeartedPumpkinBlock::new, BLOCKS);
-	public static final RegistryObject<Item> PURE_HEARTED_PUMPKIN_ITEM = doIMCRegistry("mystical_pumpkins", "pure_hearted_pumkin", () -> PureHeartedPumpkinItem::instance, ITEMS);
 	
 	private static <T extends IForgeRegistryEntry<T>> RegistryObject<T> doIMCRegistry(String modID, String id, Supplier<Supplier<T>> object, DeferredRegister<T> register) {
 		if (ModList.get().isLoaded(modID)) {
