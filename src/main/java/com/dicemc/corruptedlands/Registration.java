@@ -93,6 +93,7 @@ public class Registration {
 	    	map.put(Blocks.COBBLESTONE, Registration.CORRUPTED_COBBLESTONE_BLOCK.get());
 	    	map.put(Blocks.DIRT, Registration.CORRUPTED_DIRT_BLOCK.get());
 	    	map.put(Blocks.FARMLAND, Registration.CORRUPTED_DIRT_BLOCK.get());
+	    	map.put(Blocks.GRASS_PATH, Registration.CORRUPTED_GRASS_BLOCK.get());
 	    	map.put(Blocks.GRASS_BLOCK, Registration.CORRUPTED_GRASS_BLOCK.get());
 	    	map.put(Blocks.SAND, Registration.CORRUPTED_SAND_BLOCK.get());
 	    	map.put(Blocks.GRAVEL, Registration.CORRUPTED_GRAVEL_BLOCK.get());
