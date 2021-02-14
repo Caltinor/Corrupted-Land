@@ -3,6 +3,7 @@ package com.dicemc.corruptedlands;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,14 +13,13 @@ import com.dicemc.corruptedlands.blocks.ICorrupted;
 import com.dicemc.corruptedlands.items.PurifierItem;
 import com.dicemc.corruptedlands.items.PurifierRecipe;
 import com.jedijoe.ImmortuosCalyx.Infection.InfectionManagerCapability;
+import com.mojang.authlib.GameProfile;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -29,21 +29,28 @@ import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameType;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.BlockFlags;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
 
 @Mod(CorruptedLandMod.MOD_ID)
 public class CorruptedLandMod {
@@ -53,6 +60,7 @@ public class CorruptedLandMod {
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
 	public static boolean installedCalyx = false;
+	public static FakePlayer CorruptionPlayer;
 
 	public CorruptedLandMod() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
@@ -88,7 +96,7 @@ public class CorruptedLandMod {
 		@SuppressWarnings("resource")
 		@SubscribeEvent
 		public static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
-			if (!event.getEntity().getEntityWorld().isRemote) {
+			if (!event.getEntity().getEntityWorld().isRemote && (event.getEntity().getEntityWorld().getGameTime() % 10) == 0) {
 				if (event.getEntityLiving() instanceof PlayerEntity) {
 					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 					//purifier stone charge check
@@ -98,32 +106,24 @@ public class CorruptedLandMod {
 					}
 					//Corruption check
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted)
-						if (!installedCalyx && !player.isPotionActive(Effects.POISON)) player.addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
-						else {
-							player.getCapability(InfectionManagerCapability.INSTANCE, null).ifPresent(cap -> {
-								if (cap.getInfectionProgress() >= Config.CALYX_EFFECT_LEVEL.get()) {
-									player.addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, 20, 0));}
-								else if (!player.isPotionActive(Effects.POISON)){
-									player.addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
-								}
-							});							
-						}
+					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted && player.getHealth() > Config.CORRUPTION_EFFECT_POWER.get())
+						player.getCapability(InfectionManagerCapability.INSTANCE, null).ifPresent(cap -> {
+							if (cap.getInfectionProgress() >= Config.CALYX_EFFECT_LEVEL.get()) {
+								player.heal(Config.CORRUPTION_EFFECT_POWER.get());}
+							else {
+								player.attackEntityFrom(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
+							}
+						});							
 				}
 				if (Config.DAMAGE_ANIMALS.get() && event.getEntityLiving() instanceof AnimalEntity) {
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if ((bs.getBlock() instanceof ICorrupted) && !event.getEntityLiving().isPotionActive(Effects.POISON)) 
-						event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.POISON, 25, 0));
+					if ((bs.getBlock() instanceof ICorrupted) && event.getEntityLiving().getHealth() > Config.CORRUPTION_EFFECT_POWER.get()) 
+						event.getEntityLiving().attackEntityFrom(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
 				}
 				if (Config.HEAL_MOBS.get() && event.getEntityLiving() instanceof MonsterEntity) {
 					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
-					if (event.getEntityLiving() instanceof ZombieEntity || event.getEntityLiving() instanceof AbstractSkeletonEntity) {
-						if (bs.getBlock() instanceof ICorrupted) 
-							event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.INSTANT_DAMAGE, 20, 0));
-					}
-					else {
-						if (bs.getBlock() instanceof ICorrupted) 
-							event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, 20, 0));
+					if (bs.getBlock() instanceof ICorrupted) {
+						event.getEntityLiving().heal(Config.CORRUPTION_EFFECT_POWER.get());
 					}
 				}
 			}
@@ -139,7 +139,7 @@ public class CorruptedLandMod {
 		@SubscribeEvent
 		public static void onServerStart(FMLServerStartingEvent event ) {
 			CorruptedLandMod.SERVER = event.getServer();
-			Registration.mapBlockPairs();
+			CorruptionPlayer  = new FakePlayer(CorruptedLandMod.SERVER.getWorld(World.OVERWORLD), new GameProfile(UUID.fromString("00000000-0000-0000-0000-000000000000"), "Server"));
 			if (Loader.isClassAvailable("com.jedijoe.ImmortuosCalyx.Infection.InfectionManager")) {
 				CorruptedLandMod.installedCalyx = true;
 				LOG.info("Calyx detected. Initializing support.");
@@ -151,7 +151,12 @@ public class CorruptedLandMod {
 		public static void corruptLand(BlockPos pos, ServerWorld serverWorld) {
 			BlockState current = serverWorld.getBlockState(pos);
 			BlockState future = corruptionPair.getOrDefault(current.getBlock(), Blocks.AIR.getBlock()).getDefaultState();
-			if (!future.equals(Blocks.AIR.getDefaultState())) serverWorld.setBlockState(pos, future, BlockFlags.BLOCK_UPDATE);
+			if (!future.equals(Blocks.AIR.getDefaultState())) {
+				System.out.println("pre-Check:"+pos.toString());
+		        if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(serverWorld, pos, current, future)))
+		        	System.out.println("Changed");
+		        	serverWorld.setBlockState(pos, future, BlockFlags.BLOCK_UPDATE);
+			}
 		}
 		
 		public static void corruptNeighbors(BlockPos pos, ServerWorld serverWorld) {
