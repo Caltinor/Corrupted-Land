@@ -3,8 +3,6 @@ package com.dicemc.corruptedlands;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.util.Loader;
@@ -13,8 +11,6 @@ import com.dicemc.corruptedlands.blocks.ICorrupted;
 import com.dicemc.corruptedlands.items.PurifierItem;
 import com.dicemc.corruptedlands.items.PurifierRecipe;
 import com.jedijoe.ImmortuosCalyx.Infection.InfectionManagerCapability;
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -26,18 +22,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameType;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.BlockFlags;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
@@ -60,7 +50,6 @@ public class CorruptedLandMod {
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
 	public static boolean installedCalyx = false;
-	public static FakePlayer CorruptionPlayer;
 
 	public CorruptedLandMod() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
@@ -139,7 +128,7 @@ public class CorruptedLandMod {
 		@SubscribeEvent
 		public static void onServerStart(FMLServerStartingEvent event ) {
 			CorruptedLandMod.SERVER = event.getServer();
-			CorruptionPlayer  = new FakePlayer(CorruptedLandMod.SERVER.getWorld(World.OVERWORLD), new GameProfile(UUID.fromString("00000000-0000-0000-0000-000000000000"), "Server"));
+			Registration.mapBlockPairs();
 			if (Loader.isClassAvailable("com.jedijoe.ImmortuosCalyx.Infection.InfectionManager")) {
 				CorruptedLandMod.installedCalyx = true;
 				LOG.info("Calyx detected. Initializing support.");
@@ -152,9 +141,7 @@ public class CorruptedLandMod {
 			BlockState current = serverWorld.getBlockState(pos);
 			BlockState future = corruptionPair.getOrDefault(current.getBlock(), Blocks.AIR.getBlock()).getDefaultState();
 			if (!future.equals(Blocks.AIR.getDefaultState())) {
-				System.out.println("pre-Check:"+pos.toString());
 		        if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(serverWorld, pos, current, future)))
-		        	System.out.println("Changed");
 		        	serverWorld.setBlockState(pos, future, BlockFlags.BLOCK_UPDATE);
 			}
 		}

@@ -28,8 +28,8 @@ public class PurifierItem extends Item{
 			ServerPlayerEntity plyr = (ServerPlayerEntity) context.getPlayer();
 			final AxisAlignedBB box = new AxisAlignedBB(context.getPos()).grow(Config.PURIFIER_RANGE.get());
 			BlockPos p;
-			BlockState s;
-			outOfCharge:
+			BlockState s;			
+			outOfCharge: 
 			for(double x = box.minX; x < box.maxX; x++) {
 				for(double y = box.minY; y < box.maxY; y++) {
 					for(double z = box.minZ; z < box.maxZ; z++) {
@@ -48,7 +48,7 @@ public class PurifierItem extends Item{
 					}
 				}	
 			}
-			return ActionResultType.CONSUME;
+			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.FAIL;
 	}
