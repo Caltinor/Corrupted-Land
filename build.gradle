@@ -69,9 +69,9 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
-    compile fg.deobf("curse.maven:calyx:3101228")
-    compile fg.deobf("curse.maven:paranoia:3099326")
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.22'
+    compile fg.deobf("curse.maven:immortuos-calyx-411857:3201143")
+    compile fg.deobf("curse.maven:paranoia-414417:3105038")
 }
 
 jar {
