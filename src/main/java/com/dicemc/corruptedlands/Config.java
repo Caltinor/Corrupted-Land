@@ -14,6 +14,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_RECHARGE_RATE;
 	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_DRAIN_RATE;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_EFFECT_LEVEL;
+	public static ForgeConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
 	public static ForgeConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
 	
 	static {
@@ -35,6 +36,8 @@ public class Config {
 				.defineInRange("Purifier Recharge Rate", -1, -20000, 0);
 		PURIFIER_DRAIN_RATE = SERVER_BUILDER.comment("How much damage per block the purifier takes when used. Default 20")
 				.defineInRange("Purifier Drain Rate", 20, 0, Integer.MAX_VALUE);
+		CORRUPTION_EFFECT_POWER = SERVER_BUILDER.comment("How much damage/healing entities take when on corrupted land")
+				.define("Corruption_Effect_Power", 1.0f);
 		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.comment("Compat Settings").push("Compat");
