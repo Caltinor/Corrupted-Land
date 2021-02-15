@@ -37,7 +37,7 @@ public class Config {
 		PURIFIER_DRAIN_RATE = SERVER_BUILDER.comment("How much damage per block the purifier takes when used. Default 20")
 				.defineInRange("Purifier Drain Rate", 20, 0, Integer.MAX_VALUE);
 		CORRUPTION_EFFECT_POWER = SERVER_BUILDER.comment("How much damage/healing entities take when on corrupted land")
-				.define("Corruption_Effect_Power", 1F);
+				.define("Corruption_Effect_Power", 1.0F);
 		SERVER_BUILDER.pop();
 		
 		SERVER_BUILDER.comment("Compat Settings").push("Compat");
