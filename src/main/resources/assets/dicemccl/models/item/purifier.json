@@ -1,6 +1,11 @@
 {
-  "parent": "item/handheld",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "dicemccl:item/purifier"
-  }
+    "layer0": "dicemccl:item/purifier3"
+  },
+  "overrides": [
+  		{ "predicate": { "damage": 0.25}, "model": "dicemccl:item/purifier2"},
+  		{ "predicate": { "damage": 0.75}, "model": "dicemccl:item/purifier1"},
+  		{ "predicate": { "damage": 1.00}, "model": "dicemccl:item/purifier3"}
+  ]
 }
