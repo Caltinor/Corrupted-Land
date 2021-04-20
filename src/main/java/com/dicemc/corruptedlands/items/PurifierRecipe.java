@@ -19,26 +19,26 @@ public class PurifierRecipe extends SpecialRecipe{
 
 	@Override
 	public boolean matches(CraftingInventory inv, World worldIn) {
-		return (inv.getStackInSlot(0).getItem().equals(Items.FLINT) &&
-				inv.getStackInSlot(1).getItem().equals(Items.GLASS_PANE) &&
-				inv.getStackInSlot(2).getItem().equals(Items.FLINT) &&
-				inv.getStackInSlot(3).getItem().equals(Items.GLASS_PANE) &&
-				inv.getStackInSlot(4).getItem().equals(Items.ROTTEN_FLESH) &&
-				inv.getStackInSlot(5).getItem().equals(Items.GLASS_PANE) &&
-				inv.getStackInSlot(6).getItem().equals(Items.FLINT) &&
-				inv.getStackInSlot(7).getItem().equals(Items.GLASS_PANE) &&
-				inv.getStackInSlot(8).getItem().equals(Items.FLINT)); 
+		return (inv.getItem(0).getItem().equals(Items.FLINT) &&
+				inv.getItem(1).getItem().equals(Items.GLASS_PANE) &&
+				inv.getItem(2).getItem().equals(Items.FLINT) &&
+				inv.getItem(3).getItem().equals(Items.GLASS_PANE) &&
+				inv.getItem(4).getItem().equals(Items.ROTTEN_FLESH) &&
+				inv.getItem(5).getItem().equals(Items.GLASS_PANE) &&
+				inv.getItem(6).getItem().equals(Items.FLINT) &&
+				inv.getItem(7).getItem().equals(Items.GLASS_PANE) &&
+				inv.getItem(8).getItem().equals(Items.FLINT)); 
 	}
 
 	@Override
-	public ItemStack getCraftingResult(CraftingInventory inv) {
+	public ItemStack assemble(CraftingInventory inv) {
 		ItemStack out = new ItemStack(Registration.PURIFIER.get());
-		out.setDamage(19999);
+		out.setDamageValue(19999);
 		return out;
 	}
 
 	@Override
-	public boolean canFit(int width, int height) {return (width * height) == 9;}
+	public boolean canCraftInDimensions(int width, int height) {return (width * height) == 9;}
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {return SERIALIZER;}

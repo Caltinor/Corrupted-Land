@@ -23,24 +23,24 @@ public class PurifierItem extends Item{
 	
 	@SuppressWarnings("resource")
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		if (!context.getWorld().isRemote && context.getWorld().getBlockState(context.getPos()).getBlock() instanceof ICorrupted) {
+	public ActionResultType useOn(ItemUseContext context) {
+		if (!context.getLevel().isClientSide && context.getLevel().getBlockState(context.getClickedPos()).getBlock() instanceof ICorrupted) {
 			ServerPlayerEntity plyr = (ServerPlayerEntity) context.getPlayer();
-			final AxisAlignedBB box = new AxisAlignedBB(context.getPos()).grow(Config.PURIFIER_RANGE.get());
+			final AxisAlignedBB box = new AxisAlignedBB(context.getClickedPos()).inflate(Config.PURIFIER_RANGE.get());
 			BlockPos p;
 			BlockState s;	
-			int currentDamage = context.getItem().getDamage();
+			int currentDamage = context.getItemInHand().getDamageValue();
 			for(double x = box.minX; x < box.maxX; x++) {
 				for(double y = box.minY; y < box.maxY; y++) {
 					for(double z = box.minZ; z < box.maxZ; z++) {
 						p = new BlockPos(x, y, z);
-						s = context.getWorld().getBlockState(p);
+						s = context.getLevel().getBlockState(p);
 						if (s.getBlock() instanceof ICorrupted) {
-							if (currentDamage < context.getItem().getMaxDamage() - 1 - Config.PURIFIER_DRAIN_RATE.get()) {
-								List<ItemStack> drop = Block.getDrops(s, context.getPlayer().getServer().func_241755_D_(), p, null);
-								if (ForgeHooks.onBlockBreakEvent(context.getWorld(), plyr.interactionManager.getGameType(), plyr, p) >= 0) {
-									context.getWorld().setBlockState(p, (drop.size() == 0 ? Blocks.AIR.getDefaultState() : Block.getBlockFromItem(drop.get(0).getItem()).getDefaultState()));
-									context.getItem().damageItem(Config.PURIFIER_DRAIN_RATE.get(), context.getPlayer(), (player) -> {});
+							if (currentDamage < context.getItemInHand().getMaxDamage() - 1 - Config.PURIFIER_DRAIN_RATE.get()) {
+								List<ItemStack> drop = Block.getDrops(s, context.getPlayer().getServer().overworld(), p, null);
+								if (ForgeHooks.onBlockBreakEvent(context.getLevel(), plyr.gameMode.getGameModeForPlayer(), plyr, p) >= 0) {
+									context.getLevel().setBlockAndUpdate(p, (drop.size() == 0 ? Blocks.AIR.defaultBlockState() : Block.byItem(drop.get(0).getItem()).defaultBlockState()));
+									context.getItemInHand().hurtAndBreak(Config.PURIFIER_DRAIN_RATE.get(), context.getPlayer(), (player) -> {});
 									currentDamage += Config.PURIFIER_DRAIN_RATE.get();
 								}
 							}

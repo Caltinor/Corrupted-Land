@@ -8,11 +8,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientSetup {
 	public static void init(final FMLClientSetupEvent event) {
-		RenderTypeLookup.setRenderLayer(Registration.CORRUPTED_GRASS_BLOCK.get(), RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Registration.CORRUPTED_ICE_BLOCK.get(), RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(Registration.CORRUPTED_GRASS_BLOCK.get(), RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(Registration.CORRUPTED_ICE_BLOCK.get(), RenderType.translucent());
 		
 		event.enqueueWork(() -> {
-			ItemModelsProperties.registerProperty(Registration.PURIFIER.get(), new ResourceLocation("damage"), (s,c,l) -> {return (float)s.getDamage();});
+			ItemModelsProperties.register(Registration.PURIFIER.get(), new ResourceLocation("damage"), (s,c,l) -> {return (float)s.getDamageValue();});
 		});
 	}
 }

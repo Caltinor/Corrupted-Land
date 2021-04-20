@@ -66,9 +66,9 @@ public class CorruptedLandMod {
 		
 		@SubscribeEvent
 		public static void onFleshExpire(ItemExpireEvent event) {
-			if (event.getEntityItem().getItem().isItemEqual(new ItemStack(Items.ROTTEN_FLESH)) && !event.getEntityItem().getItem().getOrCreateTag().getBoolean("playerthrown")) {
-				BlockPos pos = new BlockPos(event.getEntityItem().getPosX(), event.getEntityItem().getPosY()-1, event.getEntityItem().getPosZ());
-				Core.corruptLand(pos, event.getEntityItem().getServer().getWorld(event.getEntityItem().getEntityWorld().getDimensionKey()));
+			if (event.getEntityItem().getItem().sameItem(new ItemStack(Items.ROTTEN_FLESH)) && !event.getEntityItem().getItem().getOrCreateTag().getBoolean("playerthrown")) {
+				BlockPos pos = new BlockPos(event.getEntityItem().getX(), event.getEntityItem().getY()-1, event.getEntityItem().getZ());
+				Core.corruptLand(pos, event.getEntityItem().getServer().getLevel(event.getEntityItem().getCommandSenderWorld().dimension()));
 			}
 		}
 		
@@ -76,7 +76,7 @@ public class CorruptedLandMod {
 		public static void onCorruptibleItemDrop(EntityJoinWorldEvent event) {
 			if (Config.FLESH_DESPAWN_TIME.get() >= 0) {
 				if (event.getEntity() instanceof ItemEntity) {
-					if (((ItemEntity) event.getEntity()).getItem().isItemEqual(new ItemStack(Items.ROTTEN_FLESH))) 
+					if (((ItemEntity) event.getEntity()).getItem().sameItem(new ItemStack(Items.ROTTEN_FLESH))) 
 						((ItemEntity)event.getEntity()).lifespan = Config.FLESH_DESPAWN_TIME.get();					
 				}	
 			}
@@ -85,32 +85,32 @@ public class CorruptedLandMod {
 		@SuppressWarnings("resource")
 		@SubscribeEvent
 		public static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
-			if (!event.getEntity().getEntityWorld().isRemote && (event.getEntity().getEntityWorld().getGameTime() % 10) == 0) {
+			if (!event.getEntity().getCommandSenderWorld().isClientSide && (event.getEntity().getCommandSenderWorld().getGameTime() % 10) == 0) {
 				if (event.getEntityLiving() instanceof PlayerEntity) {
 					PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 					//purifier stone charge check
-					if (player.getEntityWorld().canSeeSky(player.getPosition()) && player.getEntityWorld().isDaytime())	{
-						if (player.getHeldItemMainhand().getItem() instanceof PurifierItem) player.getHeldItemMainhand().damageItem(Config.PURIFIER_RECHARGE_RATE.get(), player, (p) -> {});
-						if (player.getHeldItemOffhand().getItem() instanceof PurifierItem) player.getHeldItemOffhand().damageItem(Config.PURIFIER_RECHARGE_RATE.get(), player, (p) -> {});
+					if (player.getCommandSenderWorld().canSeeSky(player.blockPosition()) && player.getCommandSenderWorld().isDay())	{
+						if (player.getMainHandItem().getItem() instanceof PurifierItem) player.getMainHandItem().hurtAndBreak(Config.PURIFIER_RECHARGE_RATE.get(), player, (p) -> {});
+						if (player.getOffhandItem().getItem() instanceof PurifierItem) player.getOffhandItem().hurtAndBreak(Config.PURIFIER_RECHARGE_RATE.get(), player, (p) -> {});
 					}
 					//Corruption check
-					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
+					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
 					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted && player.getHealth() > Config.CORRUPTION_EFFECT_POWER.get())
 						player.getCapability(InfectionManagerCapability.INSTANCE, null).ifPresent(cap -> {
 							if (cap.getInfectionProgress() >= Config.CALYX_EFFECT_LEVEL.get()) {
 								player.heal(Config.CORRUPTION_EFFECT_POWER.get());}
 							else {
-								player.attackEntityFrom(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
+								player.hurt(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
 							}
 						});							
 				}
 				if (Config.DAMAGE_ANIMALS.get() && event.getEntityLiving() instanceof AnimalEntity) {
-					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
+					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
 					if ((bs.getBlock() instanceof ICorrupted) && event.getEntityLiving().getHealth() > Config.CORRUPTION_EFFECT_POWER.get()) 
-						event.getEntityLiving().attackEntityFrom(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
+						event.getEntityLiving().hurt(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
 				}
 				if (Config.HEAL_MOBS.get() && event.getEntityLiving() instanceof MonsterEntity) {
-					BlockState bs = event.getEntityLiving().getEntityWorld().getBlockState(event.getEntityLiving().getPosition().down());
+					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
 					if (bs.getBlock() instanceof ICorrupted) {
 						event.getEntityLiving().heal(Config.CORRUPTION_EFFECT_POWER.get());
 					}
@@ -120,7 +120,7 @@ public class CorruptedLandMod {
 		
 		@SubscribeEvent
 		public static void onRottenFleshDrop(ItemTossEvent event) {
-			if (event.getEntityItem().getItem().isItemEqual(new ItemStack(Items.ROTTEN_FLESH))) {
+			if (event.getEntityItem().getItem().sameItem(new ItemStack(Items.ROTTEN_FLESH))) {
 				event.getEntityItem().getItem().getOrCreateTag().putBoolean("playerthrown", true);
 			}
 		}
@@ -139,10 +139,10 @@ public class CorruptedLandMod {
 	public static class Core {
 		public static void corruptLand(BlockPos pos, ServerWorld serverWorld) {
 			BlockState current = serverWorld.getBlockState(pos);
-			BlockState future = corruptionPair.getOrDefault(current.getBlock(), Blocks.AIR.getBlock()).getDefaultState();
-			if (!future.equals(Blocks.AIR.getDefaultState())) {
+			BlockState future = corruptionPair.getOrDefault(current.getBlock(), Blocks.AIR.getBlock()).defaultBlockState();
+			if (!future.equals(Blocks.AIR.defaultBlockState())) {
 		        if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(serverWorld, pos, current, future)))
-		        	serverWorld.setBlockState(pos, future, BlockFlags.BLOCK_UPDATE);
+		        	serverWorld.setBlock(pos, future, BlockFlags.BLOCK_UPDATE);
 			}
 		}
 		

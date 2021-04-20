@@ -10,6 +10,8 @@ import net.minecraft.block.BreakableBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class CorruptedBreakableBlock extends BreakableBlock implements ICorrupted{
 
 	public CorruptedBreakableBlock(Properties properties) {super(properties);}

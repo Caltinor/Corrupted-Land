@@ -19,13 +19,13 @@ public class CommonSetup {
 	public static void init(final FMLCommonSetupEvent event)
     {
         DeferredWorkQueue.runLater(
-            () -> DispenserBlock.registerDispenseBehavior(
+            () -> DispenserBlock.registerBehavior(
                 Items.ROTTEN_FLESH,
                 new Registration.DispenseFlesh()));
         if (ModList.get().isLoaded("paranoia")) {
         	CorruptedLandMod.LOG.info("Paranoia dectected! Initializing support.");
         	Predicate<ServerPlayerEntity> pred = player -> (
-        			player.world.getBlockState(player.getPosition().down()).getBlock() instanceof ICorrupted);
+        			player.level.getBlockState(player.blockPosition().below()).getBlock() instanceof ICorrupted);
         	SanityCallbacks.registerMultiplier(pred, Config.PARANOIA_MODIFIER.get());
         }
     }

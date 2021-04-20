@@ -11,6 +11,8 @@ import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class CorruptedFallingBlock extends FallingBlock implements ICorrupted{
 
 	public CorruptedFallingBlock(Properties properties) {super(properties);}
@@ -22,7 +24,7 @@ public class CorruptedFallingBlock extends FallingBlock implements ICorrupted{
 	}
 	
 	@Override
-	protected void onStartFalling(FallingBlockEntity fallingEntity) {
-		fallingEntity.shouldDropItem = false;
+	protected void falling(FallingBlockEntity fallingEntity) {
+		fallingEntity.dropItem = false;
 	}
 }

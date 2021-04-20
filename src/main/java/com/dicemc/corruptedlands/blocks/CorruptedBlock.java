@@ -16,6 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class CorruptedBlock extends Block implements ICorrupted{
 
 	public CorruptedBlock(Properties builder) { super(builder);}
@@ -27,10 +29,10 @@ public class CorruptedBlock extends Block implements ICorrupted{
 	}
 	
 	@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
-		if (!entityIn.isImmuneToFire() && entityIn instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)entityIn) && this.equals(Registration.CORRUPTED_OBSIDIAN_BLOCK.get())) {
-			entityIn.attackEntityFrom(DamageSource.HOT_FLOOR, 1.0F);
+	public void stepOn(World worldIn, BlockPos pos, Entity entityIn) {
+		if (!entityIn.fireImmune() && entityIn instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)entityIn) && this.equals(Registration.CORRUPTED_OBSIDIAN_BLOCK.get())) {
+			entityIn.hurt(DamageSource.HOT_FLOOR, 1.0F);
 		}
-		super.onEntityWalk(worldIn, pos, entityIn);
+		super.stepOn(worldIn, pos, entityIn);
  	}
 }
