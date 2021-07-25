@@ -6,33 +6,31 @@ import com.dicemc.corruptedlands.Config;
 import com.dicemc.corruptedlands.Registration;
 import com.dicemc.corruptedlands.CorruptedLandMod.Core;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 public class CorruptedBlock extends Block implements ICorrupted{
 
 	public CorruptedBlock(Properties builder) { super(builder);}
 
 	@Override
-	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
+	public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
 		double threshold = random.nextDouble();
 		if (threshold >= Config.SPREAD_RATE.get()) Core.corruptNeighbors(pos, worldIn);	
 	}
 	
 	@Override
-	public void stepOn(World worldIn, BlockPos pos, Entity entityIn) {
+	public void stepOn(Level worldIn, BlockPos pos, BlockState state, Entity entityIn) {
 		if (!entityIn.fireImmune() && entityIn instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)entityIn) && this.equals(Registration.CORRUPTED_OBSIDIAN_BLOCK.get())) {
 			entityIn.hurt(DamageSource.HOT_FLOOR, 1.0F);
 		}
-		super.stepOn(worldIn, pos, entityIn);
+		super.stepOn(worldIn, pos, state, entityIn);
  	}
 }

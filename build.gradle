@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -22,11 +22,11 @@ version = '1.2'
 group = 'com.yourname.modid'
 archivesBaseName = 'CorruptedLand'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'official', version: '1.17.1'
 
     runs {
         client {
@@ -70,9 +70,9 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.0'
-    compile fg.deobf("curse.maven:immortuos-calyx-411857:3201143")
-    compile fg.deobf("curse.maven:paranoia-414417:3105038")
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.8'
+    compileOnly fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
+    //runtimeOnly fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
 }
 
 jar {

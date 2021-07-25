@@ -3,17 +3,19 @@ package com.dicemc.corruptedlands.items;
 import java.util.List;
 import com.dicemc.corruptedlands.Config;
 import com.dicemc.corruptedlands.blocks.ICorrupted;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.ForgeHooks;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class PurifierItem extends Item{
 
@@ -23,10 +25,10 @@ public class PurifierItem extends Item{
 	
 	@SuppressWarnings("resource")
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
+	public InteractionResult useOn(UseOnContext context) {
 		if (!context.getLevel().isClientSide && context.getLevel().getBlockState(context.getClickedPos()).getBlock() instanceof ICorrupted) {
-			ServerPlayerEntity plyr = (ServerPlayerEntity) context.getPlayer();
-			final AxisAlignedBB box = new AxisAlignedBB(context.getClickedPos()).inflate(Config.PURIFIER_RANGE.get());
+			ServerPlayer plyr = (ServerPlayer) context.getPlayer();
+			final AABB box = new AABB(context.getClickedPos()).inflate(Config.PURIFIER_RANGE.get());
 			BlockPos p;
 			BlockState s;	
 			int currentDamage = context.getItemInHand().getDamageValue();
@@ -44,13 +46,13 @@ public class PurifierItem extends Item{
 									currentDamage += Config.PURIFIER_DRAIN_RATE.get();
 								}
 							}
-							else return ActionResultType.SUCCESS;
+							else return InteractionResult.SUCCESS;
 						}
 					}
 				}	
 			}
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.FAIL;
+		return InteractionResult.FAIL;
 	}
 }
