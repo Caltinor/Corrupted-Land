@@ -10,6 +10,7 @@ import org.apache.logging.log4j.core.util.Loader;
 import com.dicemc.corruptedlands.blocks.ICorrupted;
 import com.dicemc.corruptedlands.items.PurifierItem;
 import com.dicemc.corruptedlands.items.PurifierRecipe;
+import com.jedijoe.ImmortuosCalyx.Infection.InfectionManager;
 import com.jedijoe.ImmortuosCalyx.Infection.InfectionManagerCapability;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,6 +28,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants.BlockFlags;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -49,7 +51,7 @@ public class CorruptedLandMod {
 	public static Random MASTER_RAND = new Random();
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
-	public static boolean installedCalyx = false;
+	public static Capability<?> calyxCap = null;
 
 	public CorruptedLandMod() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
@@ -95,14 +97,20 @@ public class CorruptedLandMod {
 					}
 					//Corruption check
 					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
-					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted && player.getHealth() > Config.CORRUPTION_EFFECT_POWER.get())
-						player.getCapability(InfectionManagerCapability.INSTANCE, null).ifPresent(cap -> {
-							if (cap.getInfectionProgress() >= Config.CALYX_EFFECT_LEVEL.get()) {
-								player.heal(Config.CORRUPTION_EFFECT_POWER.get());}
-							else {
+					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted) {
+						boolean calyxDetected = player.getCapability(calyxCap, null).map(cap -> {
+							if (((InfectionManager) cap).getInfectionProgress() >= Config.CALYX_EFFECT_LEVEL.get()) {
+								player.heal(Config.CORRUPTION_EFFECT_POWER.get());
+								return true;}
+							else if (player.getHealth() > Config.CORRUPTION_EFFECT_POWER.get()){
 								player.hurt(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
+								return true;
 							}
-						});							
+							else return true;
+						}).orElse(false);
+						if (!calyxDetected && player.getHealth() > Config.CORRUPTION_EFFECT_POWER.get()) 
+							player.hurt(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
+					}							
 				}
 				if (Config.DAMAGE_ANIMALS.get() && event.getEntityLiving() instanceof AnimalEntity) {
 					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
@@ -130,7 +138,7 @@ public class CorruptedLandMod {
 			CorruptedLandMod.SERVER = event.getServer();
 			Registration.mapBlockPairs();
 			if (Loader.isClassAvailable("com.jedijoe.ImmortuosCalyx.Infection.InfectionManager")) {
-				CorruptedLandMod.installedCalyx = true;
+				CorruptedLandMod.calyxCap = InfectionManagerCapability.INSTANCE;
 				LOG.info("Calyx detected. Initializing support.");
 			}
 		}
