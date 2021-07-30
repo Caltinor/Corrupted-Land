@@ -3,6 +3,11 @@ package com.dicemc.corruptedlands;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import com.cartoonishvillain.ImmortuosCalyx.Entity.InfectedEntity;
+import com.cartoonishvillain.ImmortuosCalyx.Register;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.dicemc.corruptedlands.blocks.ICorrupted;
@@ -71,6 +76,11 @@ public class CorruptedLandMod {
 				BlockPos pos = new BlockPos(event.getEntityItem().getX(), event.getEntityItem().getY()-1, event.getEntityItem().getZ());
 				Core.corruptLand(pos, event.getEntityItem().getServer().getLevel(event.getEntityItem().getCommandSenderWorld().dimension()));
 			}
+			//Immortuos eggs corrupting ground
+			if (calyxCap != null && Config.CALYX_EGGS_CORRUPT_LAND.get() && event.getEntityItem().getItem().sameItem(new ItemStack(Register.IMMORTUOSCALYXEGGS.get()))){
+				BlockPos pos = new BlockPos(event.getEntityItem().getX(), event.getEntityItem().getY()-1, event.getEntityItem().getZ());
+				Core.corruptLand(pos, event.getEntityItem().getServer().getLevel(event.getEntityItem().getCommandSenderWorld().dimension()));
+			}
 		}
 		
 		@SubscribeEvent
@@ -120,6 +130,11 @@ public class CorruptedLandMod {
 					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
 					if (bs.getBlock() instanceof ICorrupted) {
 						event.getEntityLiving().heal(Config.CORRUPTION_EFFECT_POWER.get());
+					}
+					if(calyxCap != null && event.getEntityLiving() instanceof InfectedEntity && bs.getBlock() instanceof ICorrupted){
+						//Infected entities getting bonus effects if enabled in config.
+						if(Config.CALYX_STRENGTHEN_INFECTED.get() > 0){event.getEntityLiving().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 5, Config.CALYX_STRENGTHEN_INFECTED.get() - 1, false, false));}
+						if(Config.CALYX_RESISTANCE_INFECTED.get() > 0){event.getEntityLiving().addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 5, Config.CALYX_RESISTANCE_INFECTED.get() - 1, false, false));}
 					}
 				}
 			}
