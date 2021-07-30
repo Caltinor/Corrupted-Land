@@ -70,9 +70,10 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.8'
-    compileOnly fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
-    //runtimeOnly fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.13'
+    implementation fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
+//    compileOnly fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
+//    runtimeOnly fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
 }
 
 jar {

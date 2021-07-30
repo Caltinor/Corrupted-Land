@@ -14,6 +14,8 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_RECHARGE_RATE;
 	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_DRAIN_RATE;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_EFFECT_LEVEL;
+	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_STRENGTHEN_INFECTED;
+	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_RESISTANCE_INFECTED;
 	public static ForgeConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
 	public static ForgeConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
 	
@@ -43,6 +45,10 @@ public class Config {
 		SERVER_BUILDER.comment("Compat Settings").push("Compat");
 		CALYX_EFFECT_LEVEL = SERVER_BUILDER.comment("The level at which Calyx Infection causes corrupted land to heal instead of poison")
 				.define("Calyx_Level", 60);
+		CALYX_STRENGTHEN_INFECTED = SERVER_BUILDER.comment("Strength Effect level of entities Heavily Infected with Immortuos on corrupted land")
+						.defineInRange("Calyx_Strength", 1, 0, 5);
+		CALYX_RESISTANCE_INFECTED = SERVER_BUILDER.comment("Resistance Effect level of entities Heavily Infected with Immortuos on corrupted land")
+						.defineInRange("Calyx_Resistance", 1, 0, 5);
 		SERVER_BUILDER.pop();
 		
 		COMMON_BUILDER.comment("Compat Settings").push("Compat");
