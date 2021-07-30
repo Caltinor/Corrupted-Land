@@ -14,6 +14,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_RECHARGE_RATE;
 	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_DRAIN_RATE;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_EFFECT_LEVEL;
+	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_EGGS_CORRUPT_LAND;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_STRENGTHEN_INFECTED;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_RESISTANCE_INFECTED;
 	public static ForgeConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
@@ -49,6 +50,8 @@ public class Config {
 						.defineInRange("Calyx_Strength", 1, 0, 5);
 		CALYX_RESISTANCE_INFECTED = SERVER_BUILDER.comment("Resistance Effect level of entities Heavily Infected with Immortuos on corrupted land")
 						.defineInRange("Calyx_Resistance", 1, 0, 5);
+		CALYX_EGGS_CORRUPT_LAND = SERVER_BUILDER.comment("Whether or not Immortuos Calyx eggs will corrupt land along with rotten flesh.")
+						.define("Calyx_Eggs_Corrupt", true);
 		SERVER_BUILDER.pop();
 		
 		COMMON_BUILDER.comment("Compat Settings").push("Compat");

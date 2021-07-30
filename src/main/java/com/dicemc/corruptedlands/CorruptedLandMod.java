@@ -76,6 +76,11 @@ public class CorruptedLandMod {
 				BlockPos pos = new BlockPos(event.getEntityItem().getX(), event.getEntityItem().getY()-1, event.getEntityItem().getZ());
 				Core.corruptLand(pos, event.getEntityItem().getServer().getLevel(event.getEntityItem().getCommandSenderWorld().dimension()));
 			}
+			//Immortuos eggs corrupting ground
+			if (calyxCap != null && Config.CALYX_EGGS_CORRUPT_LAND.get() && event.getEntityItem().getItem().sameItem(new ItemStack(Register.IMMORTUOSCALYXEGGS.get()))){
+				BlockPos pos = new BlockPos(event.getEntityItem().getX(), event.getEntityItem().getY()-1, event.getEntityItem().getZ());
+				Core.corruptLand(pos, event.getEntityItem().getServer().getLevel(event.getEntityItem().getCommandSenderWorld().dimension()));
+			}
 		}
 		
 		@SubscribeEvent
@@ -127,6 +132,7 @@ public class CorruptedLandMod {
 						event.getEntityLiving().heal(Config.CORRUPTION_EFFECT_POWER.get());
 					}
 					if(calyxCap != null && event.getEntityLiving() instanceof InfectedEntity && bs.getBlock() instanceof ICorrupted){
+						//Infected entities getting bonus effects if enabled in config.
 						if(Config.CALYX_STRENGTHEN_INFECTED.get() > 0){event.getEntityLiving().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 5, Config.CALYX_STRENGTHEN_INFECTED.get() - 1, false, false));}
 						if(Config.CALYX_RESISTANCE_INFECTED.get() > 0){event.getEntityLiving().addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 5, Config.CALYX_RESISTANCE_INFECTED.get() - 1, false, false));}
 					}
