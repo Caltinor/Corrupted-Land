@@ -19,6 +19,8 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_RESISTANCE_INFECTED;
 	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_HARMED_BY_PURIFIER;
 	public static ForgeConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
+	public static ForgeConfigSpec.ConfigValue<String> BIOMERESIST;
+	public static ForgeConfigSpec.ConfigValue<Integer> BIOMERESISTAMOUNT;
 	public static ForgeConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
 	
 	static {
@@ -55,9 +57,17 @@ public class Config {
 						.define("Calyx_Eggs_Corrupt", true);
 		CALYX_HARMED_BY_PURIFIER = SERVER_BUILDER.comment("Whether or not entities heavily infected by Immortuos Calyx are harmed by the use of a purifier nearby.").define("Calyx_Harmed_By_Purifier", true);
 		SERVER_BUILDER.pop();
-		
-		COMMON_BUILDER.comment("Compat Settings").push("Compat");
-		PARANOIA_MODIFIER = SERVER_BUILDER.comment("value between -1 and 1 to define the rate at which corrupted land impacts paranoia.")
+
+		COMMON_BUILDER.comment("Common Mod Settings").push("Common");
+		BIOMERESIST = COMMON_BUILDER.comment("EXPERIMENTAL! MUST BE ALL CHARACTERS FROM [a-z0-9/._-] OR THE GAME WILL CRASH. List the biome names seperated by commas that you want to increase the resistance to the corruption of. (eg: minecraft:sunflower_plains,minecraft:flower_forest)")
+						.define("Corruption_Biome_Resistance", "");
+		BIOMERESISTAMOUNT = COMMON_BUILDER.comment("Value between 0 and 100 to define how likely a corruption resistant biome is to stop the spread of corruption on any given attempt.")
+						.defineInRange("Corruption_Resistance_Amount", 20, 0, 100);
+		COMMON_BUILDER.pop();
+
+		//Changed this to common since it's under Common Builder.
+		COMMON_BUILDER.comment("Common Compat Settings").push("Compat");
+		PARANOIA_MODIFIER = COMMON_BUILDER.comment("value between -1 and 1 to define the rate at which corrupted land impacts paranoia.")
 				.defineInRange("Paranoia_Modifier", 0.001, -1d, 1d);
 		COMMON_BUILDER.pop();
 		

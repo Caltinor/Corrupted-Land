@@ -1,13 +1,16 @@
 package com.dicemc.corruptedlands;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import com.cartoonishvillain.ImmortuosCalyx.Entity.InfectedEntity;
 import com.cartoonishvillain.ImmortuosCalyx.Register;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.dicemc.corruptedlands.blocks.ICorrupted;
@@ -56,6 +59,7 @@ public class CorruptedLandMod {
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
 	public static Capability<?> calyxCap = null;
+	public static ArrayList<ResourceLocation> biomeResistance;
 
 	public CorruptedLandMod() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
@@ -160,11 +164,21 @@ public class CorruptedLandMod {
 	
 	public static class Core {
 		public static void corruptLand(BlockPos pos, ServerLevel serverWorld) {
-			BlockState current = serverWorld.getBlockState(pos);
-			BlockState future = corruptionPair.getOrDefault(current.getBlock(), Blocks.AIR).defaultBlockState();
-			if (!future.equals(Blocks.AIR.defaultBlockState())) {
-		        if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(serverWorld, pos, current, future)))
-		        	serverWorld.setBlock(pos, future, BlockFlags.BLOCK_UPDATE);
+			//pre-emptive boolean
+			boolean resisted = false;
+			// if Biome resistance is set for 0, no need to continue this check. Otherwise check if the current biome is in the list of resistant biomes.
+			if(Config.BIOMERESISTAMOUNT.get() > 0 && biomeResistance.contains(serverWorld.getBiome(pos).getRegistryName())) {
+				int chanceToResist = Config.BIOMERESISTAMOUNT.get();
+				if(serverWorld.random.nextInt(100) <= chanceToResist) resisted = true;
+			}
+			//if the resistance check resulted in no resistance, continue as normal. Otherwise if resistance is successful, cancel the spread this time.
+			if(!resisted) {
+				BlockState current = serverWorld.getBlockState(pos);
+				BlockState future = corruptionPair.getOrDefault(current.getBlock(), Blocks.AIR).defaultBlockState();
+				if (!future.equals(Blocks.AIR.defaultBlockState())) {
+					if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(serverWorld, pos, current, future)))
+						serverWorld.setBlock(pos, future, BlockFlags.BLOCK_UPDATE);
+				}
 			}
 		}
 		
