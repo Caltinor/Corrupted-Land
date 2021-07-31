@@ -17,6 +17,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_EGGS_CORRUPT_LAND;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_STRENGTHEN_INFECTED;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_RESISTANCE_INFECTED;
+	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_HARMED_BY_PURIFIER;
 	public static ForgeConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
 	public static ForgeConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
 	
@@ -52,6 +53,7 @@ public class Config {
 						.defineInRange("Calyx_Resistance", 1, 0, 5);
 		CALYX_EGGS_CORRUPT_LAND = SERVER_BUILDER.comment("Whether or not Immortuos Calyx eggs will corrupt land along with rotten flesh.")
 						.define("Calyx_Eggs_Corrupt", true);
+		CALYX_HARMED_BY_PURIFIER = SERVER_BUILDER.comment("Whether or not entities heavily infected by Immortuos Calyx are harmed by the use of a purifier nearby.").define("Calyx_Harmed_By_Purifier", true);
 		SERVER_BUILDER.pop();
 		
 		COMMON_BUILDER.comment("Compat Settings").push("Compat");
