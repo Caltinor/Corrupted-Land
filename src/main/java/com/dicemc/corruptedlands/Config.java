@@ -20,7 +20,6 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_HARMED_BY_PURIFIER;
 	public static ForgeConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
 	public static ForgeConfigSpec.ConfigValue<String> BIOMERESIST;
-	public static ForgeConfigSpec.ConfigValue<Integer> BIOMERESISTAMOUNT;
 	public static ForgeConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
 	
 	static {
@@ -59,10 +58,8 @@ public class Config {
 		SERVER_BUILDER.pop();
 
 		COMMON_BUILDER.comment("Common Mod Settings").push("Common");
-		BIOMERESIST = COMMON_BUILDER.comment("EXPERIMENTAL! MUST BE ALL CHARACTERS FROM [a-z0-9/._-] OR THE GAME WILL CRASH. List the biome names seperated by commas that you want to increase the resistance to the corruption of. (eg: minecraft:sunflower_plains,minecraft:flower_forest)")
+		BIOMERESIST = COMMON_BUILDER.comment("BIOME NAMES MUST BE ALL CHARACTERS FROM [a-z0-9/._-] OR THE GAME WILL CRASH. List biomes and their resistance values seperated by a semi colon (;), with each biome seperated by a comma (,). Example: \"minecraft:sunflower_plains;40,minecraft:flower_forest;20\"")
 						.define("Corruption_Biome_Resistance", "");
-		BIOMERESISTAMOUNT = COMMON_BUILDER.comment("Value between 0 and 100 to define how likely a corruption resistant biome is to stop the spread of corruption on any given attempt.")
-						.defineInRange("Corruption_Resistance_Amount", 20, 0, 100);
 		COMMON_BUILDER.pop();
 
 		//Changed this to common since it's under Common Builder.

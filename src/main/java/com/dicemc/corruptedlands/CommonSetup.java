@@ -9,6 +9,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = CorruptedLandMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonSetup {
@@ -28,17 +30,25 @@ public class CommonSetup {
         }*/
     }
 
-    public static ArrayList<ResourceLocation> getBiomesForResistance() {
+    public static HashMap<ResourceLocation, Integer> getBiomesForResistance() {
         final String BiomeList = Config.BIOMERESIST.get();
+        //split biome-resistance pairs
         String[] Biomeresist = BiomeList.split(",");
-        int resistLength = Biomeresist.length;
-        ArrayList<ResourceLocation> finalBiomeresist = new ArrayList<>();
-        int counter = 0;
-        for (String i : Biomeresist) {
-            ResourceLocation newResource = new ResourceLocation(i);
-            finalBiomeresist.add(newResource);
-            counter++;
+        HashMap<ResourceLocation, Integer> resistanceMap = new HashMap<>();
+        try {
+            for (String string : Biomeresist) {
+                //split the biome-resistance pair
+                    String[] resistanceSplit = string.split(";");
+                    //protects against outofrangeexception from blank entry.
+                    if(resistanceSplit.length == 2) {
+                        ResourceLocation biome = new ResourceLocation(resistanceSplit[0]);
+                        Integer resistance = Integer.valueOf(resistanceSplit[1]);
+                        resistanceMap.put(biome, resistance);
+                    }
+            }
+        }catch (NumberFormatException e){
+            CorruptedLandMod.LOG.error("Corrupted Land: Resistances not parsed! Error in config: Invalid character where a number should be! See format guide in the common config for more information!");
         }
-        return finalBiomeresist;
+        return resistanceMap;
     }
 }

@@ -59,7 +59,7 @@ public class CorruptedLandMod {
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
 	public static Capability<?> calyxCap = null;
-	public static ArrayList<ResourceLocation> biomeResistance;
+	public static HashMap<ResourceLocation, Integer> biomeResistance;
 
 	public CorruptedLandMod() {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
@@ -167,8 +167,8 @@ public class CorruptedLandMod {
 			//pre-emptive boolean
 			boolean resisted = false;
 			// if Biome resistance is set for 0, no need to continue this check. Otherwise check if the current biome is in the list of resistant biomes.
-			if(Config.BIOMERESISTAMOUNT.get() > 0 && biomeResistance.contains(serverWorld.getBiome(pos).getRegistryName())) {
-				int chanceToResist = Config.BIOMERESISTAMOUNT.get();
+			if(biomeResistance.containsKey(serverWorld.getBiome(pos).getRegistryName())) {
+				int chanceToResist = biomeResistance.get(serverWorld.getBiome(pos).getRegistryName());
 				if(serverWorld.random.nextInt(100) <= chanceToResist) resisted = true;
 			}
 			//if the resistance check resulted in no resistance, continue as normal. Otherwise if resistance is successful, cancel the spread this time.
