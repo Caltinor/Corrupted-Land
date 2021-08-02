@@ -18,7 +18,7 @@ repositories {
     }
 }
 
-version = '1.2'
+version = '1.2.1'
 group = 'com.yourname.modid'
 archivesBaseName = 'CorruptedLand'
 

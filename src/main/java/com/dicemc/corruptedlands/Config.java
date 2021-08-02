@@ -17,7 +17,9 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_EGGS_CORRUPT_LAND;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_STRENGTHEN_INFECTED;
 	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_RESISTANCE_INFECTED;
+	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_HARMED_BY_PURIFIER;
 	public static ForgeConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
+	public static ForgeConfigSpec.ConfigValue<String> BIOMERESIST;
 	public static ForgeConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
 	
 	static {
@@ -52,10 +54,17 @@ public class Config {
 						.defineInRange("Calyx_Resistance", 1, 0, 5);
 		CALYX_EGGS_CORRUPT_LAND = SERVER_BUILDER.comment("Whether or not Immortuos Calyx eggs will corrupt land along with rotten flesh.")
 						.define("Calyx_Eggs_Corrupt", true);
+		CALYX_HARMED_BY_PURIFIER = SERVER_BUILDER.comment("Whether or not entities heavily infected by Immortuos Calyx are harmed by the use of a purifier nearby.").define("Calyx_Harmed_By_Purifier", true);
 		SERVER_BUILDER.pop();
-		
-		COMMON_BUILDER.comment("Compat Settings").push("Compat");
-		PARANOIA_MODIFIER = SERVER_BUILDER.comment("value between -1 and 1 to define the rate at which corrupted land impacts paranoia.")
+
+		COMMON_BUILDER.comment("Common Mod Settings").push("Common");
+		BIOMERESIST = COMMON_BUILDER.comment("BIOME NAMES MUST BE ALL CHARACTERS FROM [a-z0-9/._-] OR THE GAME WILL CRASH. List biomes and their resistance values seperated by a semi colon (;), with each biome seperated by a comma (,). Example: \"minecraft:sunflower_plains;40,minecraft:flower_forest;20\"")
+						.define("Corruption_Biome_Resistance", "");
+		COMMON_BUILDER.pop();
+
+		//Changed this to common since it's under Common Builder.
+		COMMON_BUILDER.comment("Common Compat Settings").push("Compat");
+		PARANOIA_MODIFIER = COMMON_BUILDER.comment("value between -1 and 1 to define the rate at which corrupted land impacts paranoia.")
 				.defineInRange("Paranoia_Modifier", 0.001, -1d, 1d);
 		COMMON_BUILDER.pop();
 		
