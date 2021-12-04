@@ -18,15 +18,15 @@ repositories {
     }
 }
 
-version = '1.2.2'
-group = 'com.yourname.modid'
+version = '1.18-1.2.2'
+group = 'dicemc.dicemccl'
 archivesBaseName = 'CorruptedLand'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: '1.18'
 
     runs {
         client {
@@ -70,10 +70,10 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.13'
+    minecraft 'net.minecraftforge:forge:1.18-38.0.13'
     //Implementation allows you to have both the in code references, and load the mod in game for testing!
 //    implementation fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
-    compileOnly fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
+    compileOnly fg.deobf("curse.maven:immortuos-calyx-411857:3544376")
 //    runtimeOnly fg.deobf("curse.maven:immortuos-calyx-411857:3399714")
 }
 

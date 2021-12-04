@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.cartoonishvillain.ImmortuosCalyx.Entity.InfectedEntity;
-import com.cartoonishvillain.ImmortuosCalyx.Infection.InfectionManagerCapability;
 import com.cartoonishvillain.ImmortuosCalyx.InternalOrganDamage;
+import com.cartoonishvillain.ImmortuosCalyx.entity.InfectedEntity;
+import com.cartoonishvillain.ImmortuosCalyx.infection.InfectionManagerCapability;
 import com.dicemc.corruptedlands.Config;
 import com.dicemc.corruptedlands.CorruptedLandMod;
 import com.dicemc.corruptedlands.blocks.ICorrupted;
@@ -25,8 +25,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.ForgeHooks;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class PurifierItem extends Item{
 

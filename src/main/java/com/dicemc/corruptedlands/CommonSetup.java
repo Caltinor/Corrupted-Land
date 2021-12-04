@@ -1,16 +1,12 @@
 package com.dicemc.corruptedlands;
 
-//import io.github.championash5357.paranoia.api.callback.SanityCallbacks;
-import com.cartoonishvillain.ImmortuosCalyx.ImmortuosCalyx;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = CorruptedLandMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonSetup {

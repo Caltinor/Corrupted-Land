@@ -1,23 +1,22 @@
 package com.dicemc.corruptedlands;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.cartoonishvillain.ImmortuosCalyx.Entity.InfectedEntity;
 import com.cartoonishvillain.ImmortuosCalyx.Register;
+import com.cartoonishvillain.ImmortuosCalyx.entity.InfectedEntity;
+import com.cartoonishvillain.ImmortuosCalyx.infection.InfectionManager;
+import com.cartoonishvillain.ImmortuosCalyx.infection.InfectionManagerCapability;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.dicemc.corruptedlands.blocks.ICorrupted;
 import com.dicemc.corruptedlands.items.PurifierItem;
 import com.dicemc.corruptedlands.items.PurifierRecipe;
-import com.cartoonishvillain.ImmortuosCalyx.Infection.InfectionManager;
-import com.cartoonishvillain.ImmortuosCalyx.Infection.InfectionManagerCapability;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,12 +34,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants.BlockFlags;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -48,7 +47,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 
 
 @Mod(CorruptedLandMod.MOD_ID)
@@ -152,7 +150,7 @@ public class CorruptedLandMod {
 		}
 		
 		@SubscribeEvent
-		public static void onServerStart(FMLServerStartingEvent event ) {
+		public static void onServerStart(ServerStartingEvent event ) {
 			CorruptedLandMod.SERVER = event.getServer();
 			Registration.mapBlockPairs();
 			if (ModList.get().isLoaded("immortuoscalyx")) {
@@ -177,7 +175,7 @@ public class CorruptedLandMod {
 				BlockState future = corruptionPair.getOrDefault(current.getBlock(), Blocks.AIR).defaultBlockState();
 				if (!future.equals(Blocks.AIR.defaultBlockState())) {
 					if (!MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(serverWorld, pos, current, future)))
-						serverWorld.setBlock(pos, future, BlockFlags.BLOCK_UPDATE);
+						serverWorld.setBlock(pos, future, Block.UPDATE_CLIENTS);
 				}
 			}
 		}
