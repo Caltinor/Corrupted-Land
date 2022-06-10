@@ -165,8 +165,8 @@ public class CorruptedLandMod {
 			//pre-emptive boolean
 			boolean resisted = false;
 			// if Biome resistance is set for 0, no need to continue this check. Otherwise check if the current biome is in the list of resistant biomes.
-			if(biomeResistance.containsKey(serverWorld.getBiome(pos).getRegistryName())) {
-				int chanceToResist = biomeResistance.get(serverWorld.getBiome(pos).getRegistryName());
+			if(biomeResistance.containsKey(serverWorld.getBiome(pos).value().getRegistryName())) {
+				int chanceToResist = biomeResistance.get(serverWorld.getBiome(pos).value().getRegistryName());
 				if(serverWorld.random.nextInt(100) <= chanceToResist) resisted = true;
 			}
 			//if the resistance check resulted in no resistance, continue as normal. Otherwise if resistance is successful, cancel the spread this time.
