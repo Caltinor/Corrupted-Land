@@ -1,6 +1,5 @@
 package com.dicemc.corruptedlands.items;
 
-import com.dicemc.corruptedlands.CorruptedLandMod;
 import com.dicemc.corruptedlands.Registration;
 
 import net.minecraft.world.inventory.CraftingContainer;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ObjectHolder;
 
 public class PurifierRecipe extends CustomRecipe{
 
@@ -43,7 +41,6 @@ public class PurifierRecipe extends CustomRecipe{
 	@Override
 	public RecipeSerializer<?> getSerializer() {return SERIALIZER;}
 	
-	@ObjectHolder(CorruptedLandMod.MOD_ID+":purifier")
 	public static SimpleRecipeSerializer<PurifierRecipe> SERIALIZER;
 
 }

@@ -1,19 +1,10 @@
 package com.dicemc.corruptedlands.items;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.cartoonishvillain.ImmortuosCalyx.InternalOrganDamage;
-import com.cartoonishvillain.ImmortuosCalyx.entity.InfectedEntity;
-import com.cartoonishvillain.ImmortuosCalyx.infection.InfectionManagerCapability;
 import com.dicemc.corruptedlands.Config;
-import com.dicemc.corruptedlands.CorruptedLandMod;
 import com.dicemc.corruptedlands.blocks.ICorrupted;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import com.dicemc.corruptedlands.compat.CalyxCompat;
+
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -61,31 +52,8 @@ public class PurifierItem extends Item{
 				}	
 			}
 			//Purifier used within range of Infected entities can harm and debuff
-			if(CorruptedLandMod.calyxCap != null && Config.CALYX_HARMED_BY_PURIFIER.get()){
-				//increases radius a bit
-				box.setMaxY(box.maxY + 3);
-				box.setMinY(box.minY - 3);
-				box.setMaxX(box.maxX + 3);
-				box.setMinX(box.minX - 3);
-				box.setMaxZ(box.maxZ + 3);
-				box.setMinZ(box.minZ - 3);
-				ArrayList<Entity> entities = (ArrayList<Entity>) context.getLevel().getEntities(null, box);
-				ArrayList<LivingEntity> LivingEntities = new ArrayList<>();
-				//Grab all suitably infected entities.
-				for(Entity entity : entities){
-					if(entity instanceof InfectedEntity) LivingEntities.add((LivingEntity) entity);
-					else if (entity instanceof LivingEntity){
-						AtomicInteger infectionRate = new AtomicInteger(0);
-						entity.getCapability(InfectionManagerCapability.INSTANCE).ifPresent(h->{infectionRate.set(h.getInfectionProgress());});
-						if(infectionRate.get() >= Config.CALYX_EFFECT_LEVEL.get()) LivingEntities.add((LivingEntity) entity);
-					}
-				}
-				//Negatively Effect them.
-				for(LivingEntity livingEntity : LivingEntities){
-					livingEntity.hurt(InternalOrganDamage.causeInternalDamage(livingEntity), (livingEntity.getMaxHealth()/5));
-					livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 90*20, 1, true, true));
-					livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 90*20, 1, true, true));
-				}
+			if(CalyxCompat.calyxCap != null && Config.CALYX_HARMED_BY_PURIFIER.get()){
+				CalyxCompat.purifierHarm(box, context.getLevel());
 			}
 			return InteractionResult.SUCCESS;
 		}

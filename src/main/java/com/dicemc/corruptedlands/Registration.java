@@ -6,6 +6,7 @@ import com.dicemc.corruptedlands.blocks.CorruptedBlock;
 import com.dicemc.corruptedlands.blocks.CorruptedBreakableBlock;
 import com.dicemc.corruptedlands.blocks.CorruptedFallingBlock;
 import com.dicemc.corruptedlands.items.PurifierItem;
+import com.dicemc.corruptedlands.items.PurifierRecipe;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -29,13 +32,17 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 public class Registration {
 		public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, CorruptedLandMod.MOD_ID);
 		public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CorruptedLandMod.MOD_ID);
+		public static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CorruptedLandMod.MOD_ID);
 		
 		public static void init() {
 			BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 			ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+			RECIPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		}
 		
 		public static final RegistryObject<Item> PURIFIER = ITEMS.register("purifier", () -> new PurifierItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).durability(20000)));
+		
+		public static final RegistryObject<RecipeSerializer<PurifierRecipe>> PURIFIER_SERIALIZER = RECIPES.register("purifier", () -> new SimpleRecipeSerializer<>(PurifierRecipe::new));
 		
 		public static final RegistryObject<Block> CORRUPTED_COBBLESTONE_BLOCK = BLOCKS.register("corrupted_cobblestone", () -> new CorruptedBlock(BlockBehaviour.Properties.copy(Blocks.COBBLESTONE).randomTicks()));
 	    public static final RegistryObject<Item> CORRUPTED_COBBLESTONE_BLOCK_ITEM = ITEMS.register("corrupted_cobblestone", () -> new BlockItem(CORRUPTED_COBBLESTONE_BLOCK.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
@@ -43,7 +50,7 @@ public class Registration {
 	    public static final RegistryObject<Block> CORRUPTED_OBSIDIAN_BLOCK = BLOCKS.register("corrupted_obsidian", () -> new CorruptedBlock(BlockBehaviour.Properties.copy(Blocks.OBSIDIAN).randomTicks()));
 	    public static final RegistryObject<Item> CORRUPTED_OBSIDIAN_BLOCK_ITEM = ITEMS.register("corrupted_obsidian", () -> new BlockItem(CORRUPTED_OBSIDIAN_BLOCK.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
 	    
-	    public static final RegistryObject<Block> CORRUPTED_ICE_BLOCK = BLOCKS.register("corrupted_ice", () -> new CorruptedBreakableBlock(BlockBehaviour.Properties.copy(Blocks.ICE).randomTicks().noDrops()));
+	    public static final RegistryObject<Block> CORRUPTED_ICE_BLOCK = BLOCKS.register("corrupted_ice", () -> new CorruptedBreakableBlock(BlockBehaviour.Properties.copy(Blocks.ICE).randomTicks().noLootTable()));
 	    public static final RegistryObject<Item> CORRUPTED_ICE_BLOCK_ITEM = ITEMS.register("corrupted_ice", () -> new BlockItem(CORRUPTED_ICE_BLOCK.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
 	    
 	    public static final RegistryObject<Block> CORRUPTED_MOSSY_COBBLESTONE_BLOCK = BLOCKS.register("corrupted_mossy_cobblestone", () -> new CorruptedBlock(BlockBehaviour.Properties.copy(Blocks.MOSSY_COBBLESTONE).randomTicks()));

@@ -4,19 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.cartoonishvillain.ImmortuosCalyx.Register;
-import com.cartoonishvillain.ImmortuosCalyx.entity.InfectedEntity;
-import com.cartoonishvillain.ImmortuosCalyx.infection.InfectionManager;
-import com.cartoonishvillain.ImmortuosCalyx.infection.InfectionManagerCapability;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.dicemc.corruptedlands.blocks.ICorrupted;
+import com.dicemc.corruptedlands.compat.CalyxCompat;
 import com.dicemc.corruptedlands.items.PurifierItem;
-import com.dicemc.corruptedlands.items.PurifierRecipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,14 +22,10 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -56,7 +47,6 @@ public class CorruptedLandMod {
 	public static Random MASTER_RAND = new Random();
 	public static MinecraftServer SERVER;
 	public static Map<Block, Block> corruptionPair = new HashMap<Block, Block>();
-	public static Capability<?> calyxCap = null;
 	public static HashMap<ResourceLocation, Integer> biomeResistance;
 
 	public CorruptedLandMod() {
@@ -65,7 +55,6 @@ public class CorruptedLandMod {
 		Registration.init();
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
-		FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, this::registerRecipeSerializers);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
@@ -79,7 +68,7 @@ public class CorruptedLandMod {
 				Core.corruptLand(pos, event.getEntityItem().getServer().getLevel(event.getEntityItem().getCommandSenderWorld().dimension()));
 			}
 			//Immortuos eggs corrupting ground
-			if (calyxCap != null && Config.CALYX_EGGS_CORRUPT_LAND.get() && event.getEntityItem().getItem().sameItem(new ItemStack(Register.IMMORTUOSCALYXEGGS.get()))){
+			if (CalyxCompat.corrupt(event.getEntityItem().getItem())){
 				BlockPos pos = new BlockPos(event.getEntityItem().getX(), event.getEntityItem().getY()-1, event.getEntityItem().getZ());
 				Core.corruptLand(pos, event.getEntityItem().getServer().getLevel(event.getEntityItem().getCommandSenderWorld().dimension()));
 			}
@@ -99,6 +88,9 @@ public class CorruptedLandMod {
 		@SubscribeEvent
 		public static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
 			if (!event.getEntity().getCommandSenderWorld().isClientSide && (event.getEntity().getCommandSenderWorld().getGameTime() % 10) == 0) {
+				BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
+				@SuppressWarnings("deprecation")
+				ResourceLocation blockID = bs.getBlock().builtInRegistryHolder().unwrapKey().get().location();
 				if (event.getEntityLiving() instanceof Player) {
 					Player player = (Player) event.getEntityLiving();
 					//purifier stone charge check
@@ -107,33 +99,22 @@ public class CorruptedLandMod {
 						if (player.getOffhandItem().getItem() instanceof PurifierItem) player.getOffhandItem().hurtAndBreak(Config.PURIFIER_RECHARGE_RATE.get(), player, (p) -> {});
 					}
 					//Corruption check
-					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
+					
 					if (!player.isCreative() && bs.getBlock() instanceof ICorrupted) {
-						boolean calyxDetected = player.getCapability(calyxCap, null).map(cap -> {
-							if (((InfectionManager) cap).getInfectionProgress() >= Config.CALYX_EFFECT_LEVEL.get()) {
-								player.heal(Config.CORRUPTION_EFFECT_POWER.get());
-								return true;}
-							else if (player.getHealth() > Config.CORRUPTION_EFFECT_POWER.get()){
-								player.hurt(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
-								return true;
-							}
-							else return true;
-						}).orElse(false);
+						boolean calyxDetected = CalyxCompat.calyxDetected(player, blockID);
 						if (!calyxDetected && player.getHealth() > Config.CORRUPTION_EFFECT_POWER.get()) 
-							player.hurt(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
+							player.hurt(new DamageSource(blockID.toString()), Config.CORRUPTION_EFFECT_POWER.get());
 					}
 				}
 				if (Config.DAMAGE_ANIMALS.get() && event.getEntityLiving() instanceof Animal) {
-					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
 					if ((bs.getBlock() instanceof ICorrupted) && event.getEntityLiving().getHealth() > Config.CORRUPTION_EFFECT_POWER.get()) 
-						event.getEntityLiving().hurt(new DamageSource(bs.getBlock().getRegistryName().toString()), Config.CORRUPTION_EFFECT_POWER.get());
+						event.getEntityLiving().hurt(new DamageSource(blockID.toString()), Config.CORRUPTION_EFFECT_POWER.get());
 				}
 				if (Config.HEAL_MOBS.get() && event.getEntityLiving() instanceof Monster) {
-					BlockState bs = event.getEntityLiving().getCommandSenderWorld().getBlockState(event.getEntityLiving().blockPosition().below());
 					if (bs.getBlock() instanceof ICorrupted) {
 						event.getEntityLiving().heal(Config.CORRUPTION_EFFECT_POWER.get());
 					}
-					if(calyxCap != null && event.getEntityLiving() instanceof InfectedEntity && bs.getBlock() instanceof ICorrupted){
+					if(CalyxCompat.isInfected(event.getEntityLiving(), bs.getBlock())){
 						//Infected entities getting bonus effects if enabled in config.
 						if(Config.CALYX_STRENGTHEN_INFECTED.get() > 0){event.getEntityLiving().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 5, Config.CALYX_STRENGTHEN_INFECTED.get() - 1, false, false));}
 						if(Config.CALYX_RESISTANCE_INFECTED.get() > 0){event.getEntityLiving().addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 5, Config.CALYX_RESISTANCE_INFECTED.get() - 1, false, false));}
@@ -154,7 +135,7 @@ public class CorruptedLandMod {
 			CorruptedLandMod.SERVER = event.getServer();
 			Registration.mapBlockPairs();
 			if (ModList.get().isLoaded("immortuoscalyx")) {
-				CorruptedLandMod.calyxCap = InfectionManagerCapability.INSTANCE;
+				CalyxCompat.init();
 				LOG.info("Calyx detected. Initializing support.");
 			}
 		}
@@ -165,8 +146,8 @@ public class CorruptedLandMod {
 			//pre-emptive boolean
 			boolean resisted = false;
 			// if Biome resistance is set for 0, no need to continue this check. Otherwise check if the current biome is in the list of resistant biomes.
-			if(biomeResistance.containsKey(serverWorld.getBiome(pos).value().getRegistryName())) {
-				int chanceToResist = biomeResistance.get(serverWorld.getBiome(pos).value().getRegistryName());
+			if(biomeResistance.containsKey(serverWorld.getBiome(pos).unwrapKey().get().location())) {
+				int chanceToResist = biomeResistance.get(serverWorld.getBiome(pos).unwrapKey().get().location());
 				if(serverWorld.random.nextInt(100) <= chanceToResist) resisted = true;
 			}
 			//if the resistance check resulted in no resistance, continue as normal. Otherwise if resistance is successful, cancel the spread this time.
@@ -210,11 +191,4 @@ public class CorruptedLandMod {
 			return false;
 		}
 	}
-	
-	public void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event)
-    {
-        event.getRegistry().registerAll(
-                new SimpleRecipeSerializer<>(PurifierRecipe::new).setRegistryName("dicemccl:purifier")
-        );
-    }
 }
