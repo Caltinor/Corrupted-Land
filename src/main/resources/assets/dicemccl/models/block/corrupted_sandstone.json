@@ -1,8 +1,0 @@
-{
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "bottom": "dicemccl:block/corrupted_sandstone_bottom",
-        "top": "dicemccl:block/corrupted_sandstone_top",
-        "side": "dicemccl:block/corrupted_sandstone"
-    }
-}

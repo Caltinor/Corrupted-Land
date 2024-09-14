@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.7",
+  "package": "com.dicemc.corruptedlands.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "pmmo.refmap.json",
+  "mixins": [
+    "BlockMixin",
+    "ServerChunkCacheMixin"
+  ],
+  "server": [],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

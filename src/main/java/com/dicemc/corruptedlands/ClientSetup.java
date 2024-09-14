@@ -1,18 +1,35 @@
 package com.dicemc.corruptedlands;
 
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+
+@EventBusSubscriber(modid=CorruptedLandMod.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value= Dist.CLIENT)
 public class ClientSetup {
-	public static void init(final FMLClientSetupEvent event) {
-		ItemBlockRenderTypes.setRenderLayer(Registration.CORRUPTED_GRASS_BLOCK.get(), RenderType.cutoutMipped());
-		ItemBlockRenderTypes.setRenderLayer(Registration.CORRUPTED_ICE_BLOCK.get(), RenderType.translucent());
-		
-		event.enqueueWork(() -> {
-			ItemProperties.register(Registration.PURIFIER.get(), new ResourceLocation("damage"), (s,l,e,i) -> {return (float)s.getDamageValue();});
-		});
+	@SubscribeEvent
+	public static void renderCorruption(RenderLevelStageEvent event) {
+//		if (!event.getStage().equals(RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS))
+//			return;
+//		PoseStack stack = event.getPoseStack();
+//		Minecraft mc = Minecraft.getInstance();
+//		Vec3 cameraPos = mc.getEntityRenderDispatcher().camera.getPosition();
+//		stack.pushPose();
+//		stack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
+//		MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
+//		VertexConsumer builder = buffer.getBuffer(RenderType.lines());
+//		//TODO render the purple outlines
+//
+//		stack.popPose();
+//		RenderSystem.disableDepthTest();
+//		buffer.endBatch();
 	}
 }

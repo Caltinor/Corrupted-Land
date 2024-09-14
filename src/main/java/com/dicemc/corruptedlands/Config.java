@@ -1,34 +1,35 @@
 package com.dicemc.corruptedlands;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class Config {
-	public static ForgeConfigSpec SERVER_CONFIG;
-	public static ForgeConfigSpec COMMON_CONFIG;
+	public static ModConfigSpec SERVER_CONFIG;
+	public static ModConfigSpec COMMON_CONFIG;
 	
-	public static ForgeConfigSpec.ConfigValue<Double> SPREAD_RATE;
-	public static ForgeConfigSpec.ConfigValue<Boolean> HEAL_MOBS;
-	public static ForgeConfigSpec.ConfigValue<Boolean> DAMAGE_ANIMALS;
-	public static ForgeConfigSpec.ConfigValue<Integer> FLESH_DESPAWN_TIME;
-	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_RANGE;
-	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_RECHARGE_RATE;
-	public static ForgeConfigSpec.ConfigValue<Integer> PURIFIER_DRAIN_RATE;
-	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_EFFECT_LEVEL;
-	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_EGGS_CORRUPT_LAND;
-	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_STRENGTHEN_INFECTED;
-	public static ForgeConfigSpec.ConfigValue<Integer> CALYX_RESISTANCE_INFECTED;
-	public static ForgeConfigSpec.ConfigValue<Boolean> CALYX_HARMED_BY_PURIFIER;
-	public static ForgeConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
-	public static ForgeConfigSpec.ConfigValue<String> BIOMERESIST;
-	public static ForgeConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
+	public static ModConfigSpec.ConfigValue<Double> SPREAD_RATE;
+	public static ModConfigSpec.ConfigValue<Boolean> HEAL_MOBS;
+	public static ModConfigSpec.ConfigValue<Boolean> DAMAGE_ANIMALS;
+	public static ModConfigSpec.ConfigValue<Integer> FLESH_DESPAWN_TIME;
+	public static ModConfigSpec.ConfigValue<Integer> PURIFIER_RANGE;
+	public static ModConfigSpec.ConfigValue<Integer> PURIFIER_RECHARGE_RATE;
+	public static ModConfigSpec.ConfigValue<Integer> PURIFIER_DRAIN_RATE;
+	public static ModConfigSpec.ConfigValue<Integer> CALYX_EFFECT_LEVEL;
+	public static ModConfigSpec.ConfigValue<Boolean> CALYX_EGGS_CORRUPT_LAND;
+	public static ModConfigSpec.ConfigValue<Integer> CALYX_STRENGTHEN_INFECTED;
+	public static ModConfigSpec.ConfigValue<Integer> CALYX_RESISTANCE_INFECTED;
+	public static ModConfigSpec.ConfigValue<Boolean> CALYX_HARMED_BY_PURIFIER;
+	public static ModConfigSpec.ConfigValue<Float> CORRUPTION_EFFECT_POWER;
+	public static ModConfigSpec.ConfigValue<String> BIOMERESIST;
+	public static ModConfigSpec.ConfigValue<Double> PARANOIA_MODIFIER;
 	
 	static {
-		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
-		ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
+		ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
 		
 		SERVER_BUILDER.comment("Mod Settings").push("Server");
 		SPREAD_RATE = SERVER_BUILDER.comment("The rate at which corruption should spread.  Higher = slower spread")
-				.defineInRange("Spread_Rate", 0.0, 0, .99);
+				.defineInRange("Spread_Rate", 0.99, 0, .99);
 		HEAL_MOBS = SERVER_BUILDER.comment("Does corrupted land heal mobs")
 				.define("Heal_Mobs", true);
 		DAMAGE_ANIMALS = SERVER_BUILDER.comment("Does corrupted land damage animals")

@@ -1,8 +1,0 @@
-{
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "bottom": "dicemccl:block/corrupted_dirt",
-        "top": "dicemccl:block/corrupted_podzol_top",
-        "side": "dicemccl:block/corrupted_podzol_side"
-    }
-}

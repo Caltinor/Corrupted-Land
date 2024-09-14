@@ -1,1 +1,25 @@
-{"type":"dicemccl:purifier"}
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FGF",
+    "GRG",
+    "FGF"
+  ],
+  "key": {
+    "F": {
+      "item": "minecraft:flint"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "R": {
+      "item": "minecraft:rotten_flesh"
+    }
+  },
+  "result": {
+    "id": "dicemccl:purifier",
+    "components": {
+      "minecraft:damage": 19999
+    }
+  }
+}
